@@ -89,7 +89,7 @@
                     <span class="bcv-label">Tasa BCV</span>
                     <span class="bcv-value" id="tasaBCV">Cargando...</span>
                     <span class="bcv-date" id="fechaBCV">--</span>
-                    <button class="btn-refresh" onclick="obtenerTasas()" title="Actualizar">🔄 Actualizar</button>
+                        <button class="btn-refresh" onclick="obtenerTasas()" title="Actualizar"><i data-lucide="refresh-cw" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> Actualizar</button>
                 </div>
             </div>
         </aside>
@@ -204,7 +204,7 @@
                 
                 <div class="filters-bar">
                     <div class="search-box">
-                        <input type="text" id="buscarPago" placeholder="🔍 Buscar pago...">
+                        <input type="text" id="buscarPago" placeholder="Buscar pago...">
                     </div>
                     <div class="date-filter">
                         <input type="date" id="fechaDesde" placeholder="Desde">
@@ -267,7 +267,7 @@
                         <div class="products-grid" id="productsGridVenta"></div>
                     </div>
                     <div class="pos-cart" id="posPanelCarrito">
-                        <h3>🛍️ Carrito</h3>
+                        <h3><i data-lucide="shopping-bag" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"></i> Carrito</h3>
                         <div class="cart-items" id="cartItems">
                             <p class="empty-cart">Carrito vacío</p>
                         </div>
@@ -463,14 +463,14 @@
                 <div class="cotizador-container" id="cotizadorForm" style="display:none;">
                     <div class="cotizador-grid">
                         <div class="cotizador-productos">
-                            <h3>Productos</h3>
+                            <h3><i data-lucide="package" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"></i> Productos</h3>
                             <div class="search-box">
                                 <input type="text" id="buscarProductoCotizacion" placeholder="🔍 Buscar producto..." oninput="buscarProductoParaCotizacion()">
                             </div>
                             <div class="products-grid" id="productsGridCotizacion"></div>
                         </div>
                         <div class="cotizador-carrito">
-                            <h3>📝 Detalle Cotización</h3>
+                            <h3><i data-lucide="file-plus" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"></i> Detalle Cotización</h3>
                             <div class="form-group">
                                 <label>Cliente</label>
                                 <select id="cotizacionCliente">
@@ -510,9 +510,9 @@
                                     <span id="cotizacionTotalBS">Bs. 0.00</span>
                                 </div>
                             </div>
-                            <button class="btn-primary btn-full" onclick="enviarCotizacionWhatsApp()">📱 Enviar por WhatsApp</button>
-                            <button class="btn-secondary btn-full" onclick="guardarCotizacion()">💾 Guardar Cotización</button>
-                            <button class="btn-secondary btn-full" onclick="cancelarCotizacion()">❌ Cancelar</button>
+                            <button class="btn-primary btn-full" onclick="enviarCotizacionWhatsApp()"><i data-lucide="send" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"></i> Enviar por WhatsApp</button>
+                            <button class="btn-secondary btn-full" onclick="guardarCotizacion()"><i data-lucide="save" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"></i> Guardar Cotización</button>
+                            <button class="btn-secondary btn-full" onclick="cancelarCotizacion()"><i data-lucide="x" style="width:16px;height:16px;vertical-align:middle;margin-right:4px;"></i> Cancelar</button>
                         </div>
                     </div>
                 </div>
@@ -596,8 +596,8 @@
                 <div class="section-header">
                     <h2>Reportes y Análisis</h2>
                     <div class="report-actions">
-                        <button class="btn-secondary" onclick="exportarCSV()">📥 Exportar CSV</button>
-                        <button class="btn-secondary" onclick="imprimirReporte()">🖨️ Imprimir</button>
+                        <button class="btn-secondary" onclick="exportarCSV()"><i data-lucide="download" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> Exportar CSV</button>
+                        <button class="btn-secondary" onclick="imprimirReporte()"><i data-lucide="printer" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> Imprimir</button>
                     </div>
                 </div>
                 
@@ -759,10 +759,10 @@
                     <div class="config-card">
                         <h3><i data-lucide="database" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Datos</h3>
                         <div class="config-form">
-                            <button class="btn-secondary" onclick="exportarDatos()">📥 Exportar Todos los Datos</button>
-                            <button class="btn-secondary" onclick="document.getElementById('importarInput').click()">📤 Importar Datos</button>
+                            <button class="btn-secondary" onclick="exportarDatos()"><i data-lucide="download" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> Exportar Todos los Datos</button>
+                            <button class="btn-secondary" onclick="document.getElementById('importarInput').click()"><i data-lucide="upload" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> Importar Datos</button>
                             <input type="file" id="importarInput" accept=".json" style="display:none" onchange="importarDatos(event)">
-                            <button class="btn-danger" onclick="limpiarTodosDatos()">🗑️ Limpiar Todos los Datos</button>
+                            <button class="btn-danger" onclick="limpiarTodosDatos()"><i data-lucide="trash-2" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;"></i> Limpiar Todos los Datos</button>
                         </div>
                     </div>
                 </div>
@@ -774,7 +774,7 @@
     <div class="modal" id="clienteModal">
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <h2 id="clienteModalTitle">Nuevo Cliente</h2>
+                <h2 id="clienteModalTitle"><i data-lucide="user-plus" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i> Nuevo Cliente</h2>
                 <span class="close-modal" onclick="cerrarModal('clienteModal')">&times;</span>
             </div>
             <form id="clienteForm">
@@ -862,7 +862,7 @@
     <div class="modal" id="pagoModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Registrar Pago</h2>
+                <h2><i data-lucide="credit-card" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i> Registrar Pago</h2>
                 <span class="close-modal" onclick="cerrarModal('pagoModal')">&times;</span>
             </div>
             <form id="pagoForm">
@@ -914,7 +914,7 @@
     <div class="modal" id="detallesModal">
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <h2>Detalles del Cliente</h2>
+                <h2><i data-lucide="eye" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i> Detalles del Cliente</h2>
                 <span class="close-modal" onclick="cerrarModal('detallesModal')">&times;</span>
             </div>
             <div id="detallesContenido"></div>
@@ -925,7 +925,7 @@
     <div class="modal" id="productoModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="productoModalTitle">Nuevo Producto</h2>
+                <h2 id="productoModalTitle"><i data-lucide="package" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i> Nuevo Producto</h2>
                 <span class="close-modal" onclick="cerrarModal('productoModal')">&times;</span>
             </div>
             <form id="productoForm">
@@ -976,7 +976,7 @@
     <div class="modal" id="detalleVentaModal">
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <h2>Detalle de Venta</h2>
+                <h2><i data-lucide="receipt" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i> Detalle de Venta</h2>
                 <span class="close-modal" onclick="cerrarModal('detalleVentaModal')">&times;</span>
             </div>
             <div id="detalleVentaContenido"></div>
@@ -987,7 +987,7 @@
     <div class="modal" id="clienteRapidoModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Nuevo Cliente (Rápido)</h2>
+                <h2><i data-lucide="user-plus" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i> Nuevo Cliente (Rápido)</h2>
                 <span class="close-modal" onclick="cerrarModal('clienteRapidoModal')">&times;</span>
             </div>
             <form id="clienteRapidoForm">
@@ -1021,7 +1021,7 @@
     <div class="modal" id="detalleCotizacionModal">
         <div class="modal-content modal-lg">
             <div class="modal-header">
-                <h2>Detalle de Cotización</h2>
+                <h2><i data-lucide="file-text" style="width:20px;height:20px;vertical-align:middle;margin-right:6px;"></i> Detalle de Cotización</h2>
                 <span class="close-modal" onclick="cerrarModal('detalleCotizacionModal')">&times;</span>
             </div>
             <div id="detalleCotizacionContenido"></div>

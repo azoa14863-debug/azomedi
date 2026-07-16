@@ -175,6 +175,25 @@ function initApp() {
     initCalculadora();
     setTimeout(() => cargarEstadisticas(), 500);
 
+    // Modo solo lectura para compartir
+    if (new URLSearchParams(window.location.search).get('viewer') === '1') {
+        document.body.classList.add('readonly-mode');
+        document.querySelectorAll('button, input, select, textarea, a[onclick]').forEach(el => {
+            if (!el.closest('.nav-item') && !el.closest('.sidebar-toggle') && !el.closest('.mobile-menu')) {
+                el.disabled = true;
+                el.style.pointerEvents = 'none';
+                el.style.opacity = '0.7';
+            }
+        });
+        document.querySelectorAll('.nav-item').forEach(el => {
+            el.style.pointerEvents = 'auto';
+        });
+        const banner = document.createElement('div');
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#1A2732;color:#FED74D;text-align:center;padding:6px;font-size:12px;font-weight:700;z-index:99999;';
+        banner.textContent = '👁️ Modo solo lectura';
+        document.body.prepend(banner);
+    }
+
     // Re-initialize Lucide icons after all DOM is ready
     if (typeof lucide !== 'undefined') {
         setTimeout(() => lucide.createIcons(), 100);
