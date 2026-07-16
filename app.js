@@ -157,6 +157,8 @@ window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
         renderProductos();
+        renderPagos();
+        renderVentas();
         const posPanel = document.getElementById('posPanelProductos');
         const posCarrito = document.getElementById('posPanelCarrito');
         if (window.innerWidth > 768) {
@@ -596,19 +598,50 @@ function renderPagos() {
         );
     }
     
-    if (pagos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No hay pagos registrados</h3></div></td></tr>';
-        return;
+    const isMobile = window.innerWidth <= 768;
+    const tableContainer = tbody?.closest('.table-container');
+
+    if (isMobile) {
+        if (tableContainer) tableContainer.style.display = 'none';
+        let cardsDiv = document.getElementById('pagosCardsMobile');
+        if (!cardsDiv) {
+            cardsDiv = document.createElement('div');
+            cardsDiv.id = 'pagosCardsMobile';
+            cardsDiv.className = 'mobile-cards';
+            if (tableContainer) tableContainer.parentNode.insertBefore(cardsDiv, tableContainer.nextSibling);
+        }
+        cardsDiv.style.display = '';
+        if (pagos.length === 0) {
+            cardsDiv.innerHTML = '<p style="text-align:center;padding:20px;color:#999;">No hay pagos registrados</p>';
+        } else {
+            cardsDiv.innerHTML = pagos.map(p => `
+                <div class="mobile-card">
+                    <div class="mc-row"><span class="mc-label">Cliente</span><span class="mc-value">${p.clienteNombre}</span></div>
+                    <div class="mc-row"><span class="mc-label">USD</span><span class="mc-value highlight">$${p.montoUSD.toFixed(2)}</span></div>
+                    <div class="mc-row"><span class="mc-label">BS</span><span class="mc-value">Bs. ${p.montoBS.toFixed(2)}</span></div>
+                    <div class="mc-row"><span class="mc-label">Método</span><span class="mc-value">${capitalizar(p.metodo)}</span></div>
+                    <div class="mc-row"><span class="mc-label">Fecha</span><span class="mc-value" style="font-size:0.7rem;">${formatearFecha(p.fecha)}</span></div>
+                    ${p.referencia || p.notas ? `<div class="mc-row"><span class="mc-label">Nota</span><span class="mc-value" style="font-size:0.7rem;">${p.referencia || p.notas}</span></div>` : ''}
+                </div>
+            `).join('');
+        }
+    } else {
+        if (tableContainer) tableContainer.style.display = '';
+        const cardsDiv = document.getElementById('pagosCardsMobile');
+        if (cardsDiv) cardsDiv.style.display = 'none';
+        if (pagos.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No hay pagos registrados</h3></div></td></tr>';
+        } else {
+            tbody.innerHTML = pagos.map(p => `<tr>
+                <td>${formatearFecha(p.fecha)}</td>
+                <td>${p.clienteNombre}</td>
+                <td>$${p.montoUSD.toFixed(2)}</td>
+                <td>Bs. ${p.montoBS.toFixed(2)}</td>
+                <td>${capitalizar(p.metodo)}</td>
+                <td>${p.referencia || p.notas || '-'}</td>
+            </tr>`).join('');
+        }
     }
-    
-    tbody.innerHTML = pagos.map(p => `<tr>
-        <td>${formatearFecha(p.fecha)}</td>
-        <td>${p.clienteNombre}</td>
-        <td>$${p.montoUSD.toFixed(2)}</td>
-        <td>Bs. ${p.montoBS.toFixed(2)}</td>
-        <td>${capitalizar(p.metodo)}</td>
-        <td>${p.referencia || p.notas || '-'}</td>
-    </tr>`).join('');
 }
 
 function filtrarPagos() {
@@ -1519,27 +1552,67 @@ function renderVentas() {
     if (desde) filtered = filtered.filter(v => v.fecha.substring(0, 10) >= desde);
     if (hasta) filtered = filtered.filter(v => v.fecha.substring(0, 10) <= hasta);
 
-    tbody.innerHTML = filtered.length === 0
-        ? '<tr><td colspan="8" style="text-align:center;padding:30px;color:#999;">No hay ventas registradas</td></tr>'
-        : filtered.map((v, i) => {
-            const esFiado = v.metodoPago === 'fiado';
-            const estado = v.estado || 'pagada';
-            return `<tr>
-                <td>#${state.ventas.indexOf(v) + 1}</td>
-                <td>${formatearFecha(v.fecha.substring(0, 10))}</td>
-                <td>${v.clienteNombre}</td>
-                <td>${v.items.length} producto(s)</td>
-                <td>$${v.totalUSD.toFixed(2)}</td>
-                <td>Bs. ${v.totalBS.toFixed(2)}</td>
-                <td>${esFiado ? '<span class="badge badge-pendiente">Fiado</span>' : capitalizar(v.metodoPago)}</td>
-                <td class="action-btns">
-                    <button class="btn-sm btn-secondary" onclick="verDetalleVenta('${v.id}')" title="Ver detalle">Ver</button>
-                    ${esFiado && estado === 'pendiente' ? `<button class="btn-sm btn-success" onclick="marcarVentaPagada('${v.id}')" title="Marcar como pagada">Cobrar</button>` : ''}
-                    <button class="btn-sm btn-secondary" onclick="imprimirComprobante(state.ventas.find(x=>x.id==='${v.id}'))" title="Imprimir">Print</button>
-                    <button class="btn-delete-venta" onclick="eliminarVenta('${v.id}')" title="Eliminar venta">X</button>
-                </td>
-            </tr>`;
-        }).join('');
+    const isMobile = window.innerWidth <= 768;
+    const tableContainer = tbody.closest('.table-container');
+
+    if (isMobile) {
+        if (tableContainer) tableContainer.style.display = 'none';
+        let cardsDiv = document.getElementById('ventasCardsMobile');
+        if (!cardsDiv) {
+            cardsDiv = document.createElement('div');
+            cardsDiv.id = 'ventasCardsMobile';
+            cardsDiv.className = 'mobile-cards';
+            if (tableContainer) tableContainer.parentNode.insertBefore(cardsDiv, tableContainer.nextSibling);
+        }
+        cardsDiv.style.display = '';
+        if (filtered.length === 0) {
+            cardsDiv.innerHTML = '<p style="text-align:center;padding:20px;color:#999;">No hay ventas registradas</p>';
+        } else {
+            cardsDiv.innerHTML = filtered.map((v, i) => {
+                const esFiado = v.metodoPago === 'fiado';
+                const estado = v.estado || 'pagada';
+                return `
+                <div class="mobile-card">
+                    <div class="mc-row"><span class="mc-label">Venta #${state.ventas.indexOf(v) + 1}</span><span class="mc-value">${formatearFecha(v.fecha.substring(0, 10))}</span></div>
+                    <div class="mc-row"><span class="mc-label">Cliente</span><span class="mc-value">${v.clienteNombre}</span></div>
+                    <div class="mc-row"><span class="mc-label">Productos</span><span class="mc-value">${v.items.length} producto(s)</span></div>
+                    <div class="mc-row"><span class="mc-label">Total</span><span class="mc-value highlight">$${v.totalUSD.toFixed(2)} | Bs. ${v.totalBS.toFixed(2)}</span></div>
+                    <div class="mc-row"><span class="mc-label">Método</span><span class="mc-value">${esFiado ? '<span style="color:var(--accent);font-weight:700;">Fiado</span>' : capitalizar(v.metodoPago)}</span></div>
+                    <div class="mc-actions">
+                        <button class="btn-sm btn-secondary" onclick="verDetalleVenta('${v.id}')">Ver</button>
+                        ${esFiado && estado === 'pendiente' ? `<button class="btn-sm btn-success" onclick="marcarVentaPagada('${v.id}')">Cobrar</button>` : ''}
+                        <button class="btn-sm btn-secondary" onclick="imprimirComprobante(state.ventas.find(x=>x.id==='${v.id}'))">Print</button>
+                        <button style="background:var(--danger);color:#fff;" onclick="eliminarVenta('${v.id}')">X</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+    } else {
+        if (tableContainer) tableContainer.style.display = '';
+        const cardsDiv = document.getElementById('ventasCardsMobile');
+        if (cardsDiv) cardsDiv.style.display = 'none';
+        tbody.innerHTML = filtered.length === 0
+            ? '<tr><td colspan="8" style="text-align:center;padding:30px;color:#999;">No hay ventas registradas</td></tr>'
+            : filtered.map((v, i) => {
+                const esFiado = v.metodoPago === 'fiado';
+                const estado = v.estado || 'pagada';
+                return `<tr>
+                    <td>#${state.ventas.indexOf(v) + 1}</td>
+                    <td>${formatearFecha(v.fecha.substring(0, 10))}</td>
+                    <td>${v.clienteNombre}</td>
+                    <td>${v.items.length} producto(s)</td>
+                    <td>$${v.totalUSD.toFixed(2)}</td>
+                    <td>Bs. ${v.totalBS.toFixed(2)}</td>
+                    <td>${esFiado ? '<span class="badge badge-pendiente">Fiado</span>' : capitalizar(v.metodoPago)}</td>
+                    <td class="action-btns">
+                        <button class="btn-sm btn-secondary" onclick="verDetalleVenta('${v.id}')" title="Ver detalle">Ver</button>
+                        ${esFiado && estado === 'pendiente' ? `<button class="btn-sm btn-success" onclick="marcarVentaPagada('${v.id}')" title="Marcar como pagada">Cobrar</button>` : ''}
+                        <button class="btn-sm btn-secondary" onclick="imprimirComprobante(state.ventas.find(x=>x.id==='${v.id}'))" title="Imprimir">Print</button>
+                        <button class="btn-delete-venta" onclick="eliminarVenta('${v.id}')" title="eliminar venta">X</button>
+                    </td>
+                </tr>`;
+            }).join('');
+    }
 }
 
 function filtrarVentas() {

@@ -2244,7 +2244,7 @@ input, select, textarea, button {
 }
 
 /* ================================================================
-   Responsive — Mobile
+   Responsive — Mobile ≤768px (Compact Everything)
    ================================================================ */
 
 @media (max-width: 768px) {
@@ -2267,77 +2267,139 @@ input, select, textarea, button {
   }
 
   .main-header {
-    padding: 0 16px;
+    padding: 0 12px;
     flex-wrap: wrap;
     height: auto;
-    min-height: var(--header-height);
-    gap: 8px;
+    min-height: 50px;
+    gap: 6px;
   }
 
   .header-right {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
   }
 
   .currency-display {
-    font-size: 0.8rem;
+    font-size: 0.72rem;
+    padding: 4px 8px;
+  }
+
+  /* Compact section headers */
+  .content-section {
+    padding: 12px 12px;
+  }
+
+  .section-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .section-header h2 {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .section-header .btn-primary,
+  .section-header .btn-secondary {
+    font-size: 0.75rem;
     padding: 6px 10px;
   }
 
-  .content-section {
-    padding: 18px 16px;
+  /* Compact filters */
+  .filters-bar {
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
   }
 
-  .form-row {
-    grid-template-columns: 1fr;
+  .search-box input,
+  .date-filter input {
+    min-width: auto;
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 0.82rem;
   }
 
+  .filter-buttons {
+    gap: 4px;
+  }
+
+  .filter-btn {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+  }
+
+  .date-filter {
+    flex-direction: row;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .date-filter input {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .date-filter button {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  /* Compact stats */
   .stats-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
 
   .stat-card {
-    padding: 16px 14px;
-    gap: 12px;
+    padding: 10px;
+    gap: 8px;
   }
 
   .stat-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
-  }
-
-  .stat-primary {
+    width: 32px;
+    height: 32px;
     font-size: 1.2rem;
   }
 
-  .stat-info h3 {
-    font-size: 0.7rem;
+  .stat-primary {
+    font-size: 1rem;
   }
 
+  .stat-info h3 {
+    font-size: 0.65rem;
+  }
+
+  .stat-secondary {
+    font-size: 0.6rem;
+  }
+
+  /* Compact dashboard charts */
   .dashboard-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .dashboard-card {
+    padding: 12px;
+  }
+
+  .dashboard-card h3 {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+
+  .chart-card canvas {
+    max-height: 180px;
   }
 
   .config-grid {
     grid-template-columns: 1fr;
-  }
-
-  .filters-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-box input {
-    min-width: auto;
-    width: 100%;
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   .report-actions {
@@ -2346,11 +2408,14 @@ input, select, textarea, button {
 
   .report-actions button {
     flex: 1;
+    font-size: 0.75rem;
+    padding: 6px 8px;
   }
 
   .recordatorio-item {
     flex-direction: column;
     align-items: flex-start;
+    padding: 10px 12px;
   }
 
   .recordatorio-actions {
@@ -2360,34 +2425,102 @@ input, select, textarea, button {
   .recordatorio-actions a,
   .recordatorio-actions button {
     flex: 1;
+    font-size: 0.75rem;
+    padding: 6px 8px;
   }
 
-  /* Tables horizontal scroll */
+  /* Tables → hidden, replaced by cards */
   .table-container {
+    display: none;
+  }
+
+  .table-container.mobile-visible {
+    display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  .data-table {
-    min-width: 600px;
+  /* Generic mobile cards for tables */
+  .mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
   }
 
-  /* Products table as cards on mobile */
+  .mobile-card {
+    background: var(--white);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .mobile-card .mc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  .mobile-card .mc-label {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+  }
+
+  .mobile-card .mc-value {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mobile-card .mc-value.highlight {
+    color: var(--primary);
+    font-weight: 800;
+  }
+
+  .mobile-card .mc-value.success {
+    color: var(--success);
+  }
+
+  .mobile-card .mc-value.danger {
+    color: var(--danger);
+  }
+
+  .mobile-card .mc-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .mobile-card .mc-actions button {
+    flex: 1;
+    padding: 5px;
+    font-size: 0.7rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  /* Products cards */
   .productos-cards-mobile {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 8px;
   }
 
   .prod-card-mobile {
     background: var(--white);
     border: 2px solid var(--border-light);
     border-radius: var(--radius);
-    padding: 12px;
+    padding: 8px 10px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
   .prod-card-mobile.sin-stock {
@@ -2397,7 +2530,7 @@ input, select, textarea, button {
 
   .prod-card-mobile .pcm-name {
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
@@ -2405,26 +2538,26 @@ input, select, textarea, button {
   }
 
   .prod-card-mobile .pcm-code {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
   }
 
   .prod-card-mobile .pcm-price {
     font-weight: 800;
-    font-size: 15px;
+    font-size: 14px;
     color: var(--primary);
   }
 
   .prod-card-mobile .pcm-stock {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
   }
 
   .prod-card-mobile .pcm-cat {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--accent);
     background: var(--accent-light);
-    padding: 2px 6px;
+    padding: 1px 5px;
     border-radius: 4px;
     display: inline-block;
     width: fit-content;
@@ -2432,16 +2565,16 @@ input, select, textarea, button {
 
   .prod-card-mobile .pcm-actions {
     display: flex;
-    gap: 6px;
-    margin-top: 6px;
+    gap: 4px;
+    margin-top: 4px;
   }
 
   .prod-card-mobile .pcm-actions button {
     flex: 1;
-    padding: 6px;
-    font-size: 11px;
+    padding: 4px;
+    font-size: 10px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
     font-weight: 600;
   }
@@ -2450,7 +2583,7 @@ input, select, textarea, button {
   .pos-mobile-tabs {
     display: flex;
     gap: 0;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     background: var(--bg);
     border-radius: var(--radius);
     overflow: hidden;
@@ -2459,10 +2592,10 @@ input, select, textarea, button {
 
   .pos-tab {
     flex: 1;
-    padding: 12px;
+    padding: 8px;
     border: none;
     background: transparent;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     cursor: pointer;
     color: var(--text-muted);
@@ -2476,48 +2609,117 @@ input, select, textarea, button {
 
   .pos-container {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .pos-products {
+    padding: 12px;
+  }
+
+  .pos-search-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pos-search-row select {
+    width: 100%;
+    min-width: auto;
+    height: 36px;
+    font-size: 0.8rem;
   }
 
   .pos-cart {
     position: static;
     max-height: none;
+    padding: 12px;
+  }
+
+  .pos-cart h3 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .cart-items {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+
+  .cart-summary {
+    padding: 8px 0;
+  }
+
+  .cart-row {
+    font-size: 0.82rem;
+    padding: 4px 0;
+  }
+
+  .cart-total {
+    font-size: 1rem;
+  }
+
+  .cart-total-bs {
+    font-size: 0.9rem;
+  }
+
+  .cart-client,
+  .cart-method {
+    margin: 6px 0;
+  }
+
+  .cart-client label,
+  .cart-method label {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
+  .cart-client select,
+  .cart-method select {
+    font-size: 0.82rem;
+    padding: 6px 8px;
+  }
+
+  .btn-full {
+    padding: 10px;
+    font-size: 0.85rem;
+    margin-top: 6px;
   }
 
   .products-grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 6px;
+    max-height: 300px;
   }
 
   .product-card {
-    padding: 10px 8px;
+    padding: 8px 6px;
   }
 
   .product-card .prod-name {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .product-card .prod-price {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   /* Calculator */
   .calculadora-container {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 10px;
   }
 
   .calc-card {
-    padding: 16px;
+    padding: 12px;
   }
 
   .calc-tasa {
-    font-size: 22px;
-    padding: 12px 0;
+    font-size: 20px;
+    padding: 8px 0;
   }
 
   .calc-row {
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
   }
 
   .calc-arrow {
@@ -2526,32 +2728,36 @@ input, select, textarea, button {
   }
 
   .calc-input-group input {
-    font-size: 20px;
-    padding: 14px;
+    font-size: 18px;
+    padding: 12px;
   }
 
   .calc-display {
-    font-size: 22px;
-    padding: 14px;
-    min-height: 54px;
+    font-size: 20px;
+    padding: 12px;
+    min-height: 48px;
   }
 
   .calc-buttons {
-    gap: 6px;
+    gap: 5px;
   }
 
   .calc-buttons button {
-    padding: 16px;
-    font-size: 20px;
-    min-height: 52px;
+    padding: 14px;
+    font-size: 18px;
+    min-height: 48px;
   }
 
   .calc-buttons button.calc-eq {
-    padding: 18px;
-    font-size: 22px;
+    padding: 16px;
+    font-size: 20px;
   }
 
   /* Cotizaciones */
+  .cotizador-container {
+    padding: 12px;
+  }
+
   .cotizador-grid {
     grid-template-columns: 1fr;
   }
@@ -2559,10 +2765,21 @@ input, select, textarea, button {
   /* Clients grid */
   .clients-grid {
     grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .client-card {
+    padding: 10px 12px;
   }
 
   .client-card-actions {
     flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .client-card-actions button {
+    font-size: 0.7rem;
+    padding: 4px 8px;
   }
 
   /* Reports */
@@ -2570,31 +2787,38 @@ input, select, textarea, button {
     grid-template-columns: 1fr;
   }
 
-  .date-filter {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .date-filter input {
-    min-width: auto;
-    width: 100%;
-  }
-
-  .date-filter button {
-    width: 100%;
+  .report-card {
+    padding: 12px;
   }
 
   /* Quick conversions */
   .quick-conv-item {
-    padding: 10px 12px;
-    font-size: 13px;
+    padding: 8px 10px;
+    font-size: 12px;
   }
 
-  .ventas-filter-row {
-    flex-direction: column;
-    gap: 8px;
+  /* Section spacing */
+  .section-header + .filters-bar,
+  .section-header + .pos-mobile-tabs,
+  .section-header + .table-container,
+  .section-header + .stats-grid,
+  .section-header + .dashboard-grid {
+    margin-top: 0;
+  }
+
+  /* Compact tables section header within ventas */
+  #section-ventas .section-header {
+    margin-bottom: 8px;
+  }
+
+  #section-ventas .section-header h2 {
+    font-size: 0.9rem;
   }
 }
+
+/* ================================================================
+   Responsive — Extra Small ≤480px
+   ================================================================ */
 
 @media (max-width: 480px) {
   .modal-content {
@@ -2618,31 +2842,31 @@ input, select, textarea, button {
 
   .stats-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
   }
 
   .stat-card {
-    padding: 12px;
-    gap: 10px;
+    padding: 8px;
+    gap: 6px;
   }
 
   .stat-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 1.3rem;
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
   }
 
   .stat-primary {
-    font-size: 1.05rem;
+    font-size: 0.9rem;
   }
 
   .stat-info h3 {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
 
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 6px;
   }
 
   .productos-cards-mobile {
@@ -2650,40 +2874,49 @@ input, select, textarea, button {
   }
 
   .product-card {
-    padding: 10px 8px;
+    padding: 8px 6px;
   }
 
   .product-card .prod-name {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .product-card .prod-price {
-    font-size: 13px;
-  }
-
-  .calc-buttons button {
-    padding: 18px;
-    font-size: 22px;
-    min-height: 56px;
-  }
-
-  .calc-display {
-    font-size: 20px;
-    padding: 12px;
-  }
-
-  .currency-display {
-    font-size: 0.7rem;
-    padding: 5px 8px;
-  }
-
-  .quick-conv-item {
-    padding: 8px 10px;
     font-size: 12px;
   }
 
+  .calc-buttons button {
+    padding: 16px;
+    font-size: 20px;
+    min-height: 52px;
+  }
+
+  .calc-display {
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  .currency-display {
+    font-size: 0.65rem;
+    padding: 4px 6px;
+  }
+
+  .quick-conv-item {
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
   .recordatorio-item {
-    padding: 12px 14px;
+    padding: 8px 10px;
+  }
+
+  .mobile-card .mc-row {
+    font-size: 0.75rem;
+  }
+
+  .pos-tab {
+    padding: 6px;
+    font-size: 0.75rem;
   }
 }
 
