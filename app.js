@@ -156,7 +156,7 @@ function initApp() {
             precioBS: state.tasaBCV ? p.precioUSD * state.tasaBCV : 0,
             fechaCreacion: new Date().toISOString()
         }));
-        localStorage.setItem('cp_productos', JSON.stringify(state.productos));
+        saveAndSync('productos', state.productos);
         localStorage.setItem('cp_productos_version', PRODUCTOS_VERSION);
     }
 
@@ -195,9 +195,7 @@ function initApp() {
     }
 
     // Re-initialize Lucide icons after all DOM is ready
-    if (typeof lucide !== 'undefined') {
-        setTimeout(() => lucide.createIcons(), 100);
-    }
+    refreshIcons();
 }
 
 let resizeTimer;
@@ -230,6 +228,12 @@ function showToast(msg, type = 'success') {
     container.appendChild(toast);
     setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(12px)'; }, 2800);
     setTimeout(() => toast.remove(), 3200);
+}
+
+function refreshIcons() {
+    if (typeof lucide !== 'undefined') {
+        try { lucide.createIcons(); } catch(e) {}
+    }
 }
 
 // ============================================
@@ -327,7 +331,7 @@ function recalcularPreciosBS() {
     state.productos.forEach(p => {
         p.precioBS = p.precioUSD * state.tasaBCV;
     });
-    localStorage.setItem('cp_productos', JSON.stringify(state.productos));
+    saveAndSync('productos', state.productos);
 }
 
 // ============================================
@@ -1095,9 +1099,16 @@ function guardarMensajes() {
 // DATOS
 // ============================================
 function guardarDatos() {
-    localStorage.setItem('cp_clientes', JSON.stringify(state.clientes));
-    localStorage.setItem('cp_pagos', JSON.stringify(state.pagos));
-    localStorage.setItem('cp_config', JSON.stringify(state.config));
+    saveAndSync('clientes', state.clientes);
+    saveAndSync('pagos', state.pagos);
+    saveAndSync('config', state.config);
+}
+
+function saveAndSync(key, data) {
+    localStorage.setItem('cp_' + key, JSON.stringify(data));
+    if (typeof firebaseSave === 'function') {
+        firebaseSave(key, data);
+    }
 }
 
 function exportarDatos() {
@@ -1419,7 +1430,7 @@ function guardarProducto() {
         state.productos.push(data);
     }
 
-    localStorage.setItem('cp_productos', JSON.stringify(state.productos));
+    saveAndSync('productos', state.productos);
     cerrarModal('productoModal');
     renderProductos();
     renderProductosVenta();
@@ -1433,7 +1444,7 @@ function editarProducto(id) {
 function eliminarProducto(id) {
     if (!confirm('¿Eliminar este producto?')) return;
     state.productos = state.productos.filter(p => p.id !== id);
-    localStorage.setItem('cp_productos', JSON.stringify(state.productos));
+    saveAndSync('productos', state.productos);
     renderProductos();
     renderProductosVenta();
     showToast('Producto eliminado', 'success');
@@ -2045,7 +2056,7 @@ function guardarClienteRapido() {
     };
 
     state.clientes.push(cliente);
-    localStorage.setItem('cp_clientes', JSON.stringify(state.clientes));
+    saveAndSync('clientes', state.clientes);
 
     cerrarModal('clienteRapidoModal');
     cargarSelectClientesVenta();
@@ -2122,7 +2133,7 @@ function procesarVenta() {
         });
 
         cliente.estado = cliente.montoUSD > cliente.montoPagadoUSD ? 'pendiente' : 'pagado';
-        localStorage.setItem('cp_clientes', JSON.stringify(state.clientes));
+        saveAndSync('clientes', state.clientes);
     }
 
     state.carrito.forEach(c => {
@@ -2131,8 +2142,8 @@ function procesarVenta() {
     });
 
     state.ventas.push(venta);
-    localStorage.setItem('cp_productos', JSON.stringify(state.productos));
-    localStorage.setItem('cp_ventas', JSON.stringify(state.ventas));
+    saveAndSync('productos', state.productos);
+    saveAndSync('ventas', state.ventas);
 
     state.carrito = [];
     renderCarritoVenta();
@@ -2218,7 +2229,7 @@ function procesarVentaFiada() {
     });
 
     cliente.estado = 'pendiente';
-    localStorage.setItem('cp_clientes', JSON.stringify(state.clientes));
+    saveAndSync('clientes', state.clientes);
 
     state.carrito.forEach(c => {
         const prod = state.productos.find(p => p.id === c.prodId);
@@ -2226,8 +2237,8 @@ function procesarVentaFiada() {
     });
 
     state.ventas.push(venta);
-    localStorage.setItem('cp_productos', JSON.stringify(state.productos));
-    localStorage.setItem('cp_ventas', JSON.stringify(state.ventas));
+    saveAndSync('productos', state.productos);
+    saveAndSync('ventas', state.ventas);
 
     state.carrito = [];
     renderCarritoVenta();
@@ -2258,11 +2269,11 @@ function marcarVentaPagada(id) {
             cliente.montoPagadoUSD = (cliente.montoPagadoUSD || 0) + venta.totalUSD;
             cliente.montoPagadoBS = (cliente.montoPagadoBS || 0) + venta.totalBS;
             cliente.estado = cliente.montoUSD > cliente.montoPagadoUSD ? 'pendiente' : 'pagado';
-            localStorage.setItem('cp_clientes', JSON.stringify(state.clientes));
+            saveAndSync('clientes', state.clientes);
         }
     }
 
-    localStorage.setItem('cp_ventas', JSON.stringify(state.ventas));
+    saveAndSync('ventas', state.ventas);
     renderVentas();
     renderClientes();
     renderDashboard();
@@ -2311,13 +2322,13 @@ function eliminarVenta(id) {
             }
 
             cliente.estado = cliente.montoUSD > cliente.montoPagadoUSD ? 'pendiente' : 'pagado';
-            localStorage.setItem('cp_clientes', JSON.stringify(state.clientes));
+            saveAndSync('clientes', state.clientes);
         }
     }
 
     state.ventas = state.ventas.filter(v => v.id !== id);
-    localStorage.setItem('cp_ventas', JSON.stringify(state.ventas));
-    localStorage.setItem('cp_productos', JSON.stringify(state.productos));
+    saveAndSync('ventas', state.ventas);
+    saveAndSync('productos', state.productos);
 
     renderVentas();
     renderProductos();
@@ -2492,7 +2503,7 @@ function guardarCotizacion() {
     };
 
     state.cotizaciones.push(cotizacion);
-    localStorage.setItem('cp_cotizaciones', JSON.stringify(state.cotizaciones));
+    saveAndSync('cotizaciones', state.cotizaciones);
 
     state.carritoCotizacion = [];
     document.getElementById('cotizadorForm').style.display = 'none';
@@ -2641,7 +2652,7 @@ function cambiarEstadoCotizacion(id, estado) {
     const c = state.cotizaciones.find(x => x.id === id);
     if (!c) return;
     c.estado = estado;
-    localStorage.setItem('cp_cotizaciones', JSON.stringify(state.cotizaciones));
+    saveAndSync('cotizaciones', state.cotizaciones);
     renderCotizaciones();
     showToast('Estado actualizado', 'success');
 }
@@ -2649,7 +2660,7 @@ function cambiarEstadoCotizacion(id, estado) {
 function eliminarCotizacion(id) {
     if (!confirm('¿Eliminar esta cotización?')) return;
     state.cotizaciones = state.cotizaciones.filter(c => c.id !== id);
-    localStorage.setItem('cp_cotizaciones', JSON.stringify(state.cotizaciones));
+    saveAndSync('cotizaciones', state.cotizaciones);
     renderCotizaciones();
     showToast('Cotización eliminada', 'success');
 }
