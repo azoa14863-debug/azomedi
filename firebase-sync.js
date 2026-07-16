@@ -49,15 +49,13 @@ function startSync() {
     paths.forEach(path => {
         db.ref(path).on('value', (snap) => {
             const data = snap.val();
-            if (data) {
-                const arr = Array.isArray(data) ? data : Object.values(data);
-                state[path] = arr;
-                _syncingFromFirebase = true;
-                localStorage.setItem('cp_' + path, JSON.stringify(arr));
-                _syncingFromFirebase = false;
-                console.log('[Firebase] Synced:', path, arr.length, 'items');
-                refreshView(path);
-            }
+            const arr = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
+            state[path] = arr;
+            _syncingFromFirebase = true;
+            localStorage.setItem('cp_' + path, JSON.stringify(arr));
+            _syncingFromFirebase = false;
+            console.log('[Firebase] Synced:', path, arr.length, 'items');
+            refreshView(path);
         });
     });
 
@@ -83,17 +81,24 @@ function startSync() {
             _syncingFromFirebase = false;
         }
     });
+
+    setInterval(() => {
+        renderDashboard();
+        renderReportes();
+    }, 30000);
 }
 
 function refreshView(path) {
     switch (path) {
-        case 'clientes': renderClientes(); renderPagos(); cargarSelectClientesVenta(); cargarSelectClientesCotizacion(); renderDashboard(); break;
-        case 'pagos': renderPagos(); renderDashboard(); break;
-        case 'productos': renderProductos(); renderProductosVenta(); renderDashboard(); break;
-        case 'ventas': renderVentas(); renderDashboard(); cargarEstadisticas(); break;
+        case 'clientes': renderClientes(); renderPagos(); cargarSelectClientesVenta(); cargarSelectClientesCotizacion(); break;
+        case 'pagos': renderPagos(); break;
+        case 'productos': renderProductos(); renderProductosVenta(); break;
+        case 'ventas': renderVentas(); cargarEstadisticas(); break;
         case 'cotizaciones': renderCotizaciones(); break;
         case 'config': loadConfig(); loadConfigVisual(); break;
     }
+    renderDashboard();
+    renderReportes();
 }
 
 function firebaseSave(path, data) {
