@@ -111,9 +111,11 @@ let state = {
 };
 
 // Auto-sync to Firebase when localStorage changes
+let _syncingFromFirebase = false;
 const _origSetItem = localStorage.setItem.bind(localStorage);
 localStorage.setItem = function(key, value) {
     _origSetItem(key, value);
+    if (_syncingFromFirebase) return;
     if (typeof firebaseSave === 'function' && firebaseReady && key.startsWith('cp_')) {
         const path = key.replace('cp_', '');
         try {

@@ -10,8 +10,6 @@ function showSyncStatus(msg, color) {
     el.textContent = msg;
     el.style.background = color;
     el.style.display = 'block';
-    clearTimeout(el._hideTimer);
-    el._hideTimer = setTimeout(() => { el.style.display = 'none'; }, 3000);
 }
 
 function initFirebase() {
@@ -54,7 +52,9 @@ function startSync() {
             if (data) {
                 const arr = Array.isArray(data) ? data : Object.values(data);
                 state[path] = arr;
+                _syncingFromFirebase = true;
                 localStorage.setItem('cp_' + path, JSON.stringify(arr));
+                _syncingFromFirebase = false;
                 console.log('[Firebase] Synced:', path, arr.length, 'items');
                 refreshView(path);
             }
@@ -66,8 +66,10 @@ function startSync() {
         if (val) {
             state.tasaBCV = val.valor;
             state.fechaTasaBCV = val.fecha;
+            _syncingFromFirebase = true;
             localStorage.setItem('cp_tasaBCV', val.valor);
             localStorage.setItem('cp_fechaTasaBCV', val.fecha);
+            _syncingFromFirebase = false;
             updateTasaDisplay();
         }
     });
@@ -76,7 +78,9 @@ function startSync() {
         const val = snap.val();
         if (val) {
             state.tasaParalelo = val.valor;
+            _syncingFromFirebase = true;
             localStorage.setItem('cp_tasaParalelo', val.valor);
+            _syncingFromFirebase = false;
         }
     });
 }
