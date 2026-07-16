@@ -260,6 +260,14 @@ input, select, textarea, button {
 }
 
 /* ================================================================
+   POS Mobile Tabs
+   ================================================================ */
+
+.pos-mobile-tabs {
+  display: none;
+}
+
+/* ================================================================
    Main Content
    ================================================================ */
 
@@ -2364,7 +2372,108 @@ input, select, textarea, button {
     min-width: 600px;
   }
 
+  /* Products table as cards on mobile */
+  .productos-cards-mobile {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .prod-card-mobile {
+    background: var(--white);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .prod-card-mobile.sin-stock {
+    opacity: 0.5;
+    border-color: var(--danger);
+  }
+
+  .prod-card-mobile .pcm-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .prod-card-mobile .pcm-code {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .prod-card-mobile .pcm-price {
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--primary);
+  }
+
+  .prod-card-mobile .pcm-stock {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .prod-card-mobile .pcm-cat {
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-light);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .prod-card-mobile .pcm-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .prod-card-mobile .pcm-actions button {
+    flex: 1;
+    padding: 6px;
+    font-size: 11px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
   /* POS */
+  .pos-mobile-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 16px;
+    background: var(--bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 2px solid var(--border-light);
+  }
+
+  .pos-tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+
+  .pos-tab.active {
+    background: var(--primary);
+    color: var(--white);
+  }
+
   .pos-container {
     grid-template-columns: 1fr;
   }
@@ -2534,6 +2643,10 @@ input, select, textarea, button {
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
+  }
+
+  .productos-cards-mobile {
+    grid-template-columns: 1fr;
   }
 
   .product-card {

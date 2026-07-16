@@ -230,8 +230,12 @@
                     <button class="btn-primary" onclick="nuevaVenta()">+ Nueva Venta</button>
                 </div>
 
+                <div class="pos-mobile-tabs">
+                    <button class="pos-tab active" onclick="posTab('productos')">Productos</button>
+                    <button class="pos-tab" onclick="posTab('carrito')">Carrito (<span id="posTabCount">0</span>)</button>
+                </div>
                 <div class="pos-container">
-                    <div class="pos-products">
+                    <div class="pos-products" id="posPanelProductos">
                         <div class="pos-search-row">
                             <div class="search-box">
                                 <input type="text" id="buscarProductoVenta" placeholder="Buscar producto..." oninput="buscarProductoParaVenta()">
@@ -248,7 +252,7 @@
                         </div>
                         <div class="products-grid" id="productsGridVenta"></div>
                     </div>
-                    <div class="pos-cart">
+                    <div class="pos-cart" id="posPanelCarrito">
                         <h3>🛍️ Carrito</h3>
                         <div class="cart-items" id="cartItems">
                             <p class="empty-cart">Carrito vacío</p>

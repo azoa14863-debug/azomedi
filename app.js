@@ -152,6 +152,25 @@ function initApp() {
     setTimeout(() => cargarEstadisticas(), 500);
 }
 
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        renderProductos();
+        const posPanel = document.getElementById('posPanelProductos');
+        const posCarrito = document.getElementById('posPanelCarrito');
+        if (window.innerWidth > 768) {
+            if (posPanel) posPanel.style.display = '';
+            if (posCarrito) posCarrito.style.display = '';
+            const tabs = document.querySelector('.pos-mobile-tabs');
+            if (tabs) tabs.style.display = 'none';
+        } else {
+            const tabs = document.querySelector('.pos-mobile-tabs');
+            if (tabs) tabs.style.display = '';
+        }
+    }, 200);
+});
+
 function showToast(msg, type = 'success') {
     const container = document.getElementById('toastContainer');
     if (!container) return;
@@ -1197,24 +1216,57 @@ function renderProductos() {
         case 'agotados': filtered = filtered.filter(p => p.stock <= 0); break;
     }
 
-    tbody.innerHTML = filtered.length === 0
-        ? '<tr><td colspan="9" style="text-align:center;padding:30px;color:#999;">No hay productos registrados</td></tr>'
-        : filtered.map(p => `
-            <tr>
-                <td><strong>${p.codigo}</strong></td>
-                <td>${p.nombre}</td>
-                <td>${p.descripcion || '-'}</td>
-                <td>$${p.precioUSD.toFixed(2)}</td>
-                <td>Bs. ${(p.precioBS || 0).toFixed(2)}</td>
-                <td>${p.stock <= 5 ? `<span style="color:var(--danger);font-weight:700;">${p.stock} ⚠️</span>` : p.stock}</td>
-                <td>${p.categoria || '-'}</td>
-                <td>${p.stock > 0 ? '<span style="color:var(--success)">Activo</span>' : '<span style="color:var(--danger)">Agotado</span>'}</td>
-                <td class="action-btns">
-                    <button class="btn-sm btn-secondary" onclick="editarProducto('${p.id}')">✏️</button>
-                    <button class="btn-sm btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button>
-                </td>
-            </tr>
-        `).join('');
+    const isMobile = window.innerWidth <= 768;
+    const tableContainer = tbody.closest('.table-container');
+
+    if (isMobile) {
+        if (tableContainer) tableContainer.style.display = 'none';
+        let cardsDiv = document.getElementById('productosCardsMobile');
+        if (!cardsDiv) {
+            cardsDiv = document.createElement('div');
+            cardsDiv.id = 'productosCardsMobile';
+            cardsDiv.className = 'productos-cards-mobile';
+            tableContainer.parentNode.insertBefore(cardsDiv, tableContainer.nextSibling);
+        }
+        cardsDiv.style.display = '';
+        cardsDiv.innerHTML = filtered.length === 0
+            ? '<p style="text-align:center;padding:30px;color:#999;grid-column:1/-1;">No hay productos registrados</p>'
+            : filtered.map(p => `
+                <div class="prod-card-mobile ${p.stock <= 0 ? 'sin-stock' : ''}">
+                    <div class="pcm-name">${p.nombre}</div>
+                    <div class="pcm-code">${p.codigo}</div>
+                    <div class="pcm-price">$${p.precioUSD.toFixed(2)}</div>
+                    <div class="pcm-stock">Stock: ${p.stock <= 5 ? `<span style="color:var(--danger);font-weight:700;">${p.stock}</span>` : p.stock}</div>
+                    ${p.categoria ? `<div class="pcm-cat">${p.categoria}</div>` : ''}
+                    <div class="pcm-actions">
+                        <button class="btn-sm btn-secondary" onclick="editarProducto('${p.id}')">Editar</button>
+                        <button class="btn-sm btn-danger" onclick="eliminarProducto('${p.id}')">Eliminar</button>
+                    </div>
+                </div>
+            `).join('');
+    } else {
+        if (tableContainer) tableContainer.style.display = '';
+        const cardsDiv = document.getElementById('productosCardsMobile');
+        if (cardsDiv) cardsDiv.style.display = 'none';
+        tbody.innerHTML = filtered.length === 0
+            ? '<tr><td colspan="9" style="text-align:center;padding:30px;color:#999;">No hay productos registrados</td></tr>'
+            : filtered.map(p => `
+                <tr>
+                    <td><strong>${p.codigo}</strong></td>
+                    <td>${p.nombre}</td>
+                    <td>${p.descripcion || '-'}</td>
+                    <td>$${p.precioUSD.toFixed(2)}</td>
+                    <td>Bs. ${(p.precioBS || 0).toFixed(2)}</td>
+                    <td>${p.stock <= 5 ? `<span style="color:var(--danger);font-weight:700;">${p.stock} ⚠️</span>` : p.stock}</td>
+                    <td>${p.categoria || '-'}</td>
+                    <td>${p.stock > 0 ? '<span style="color:var(--success)">Activo</span>' : '<span style="color:var(--danger)">Agotado</span>'}</td>
+                    <td class="action-btns">
+                        <button class="btn-sm btn-secondary" onclick="editarProducto('${p.id}')">✏️</button>
+                        <button class="btn-sm btn-danger" onclick="eliminarProducto('${p.id}')">🗑️</button>
+                    </td>
+                </tr>
+            `).join('');
+    }
 }
 
 function abrirModalProducto(id) {
@@ -1376,6 +1428,22 @@ function eliminarDelCarrito(prodId) {
     renderCarritoVenta();
 }
 
+function posTab(tab) {
+    const productos = document.getElementById('posPanelProductos');
+    const carrito = document.getElementById('posPanelCarrito');
+    const tabs = document.querySelectorAll('.pos-tab');
+    tabs.forEach(t => t.classList.remove('active'));
+    if (tab === 'productos') {
+        productos.style.display = '';
+        carrito.style.display = 'none';
+        tabs[0].classList.add('active');
+    } else {
+        productos.style.display = 'none';
+        carrito.style.display = '';
+        tabs[1].classList.add('active');
+    }
+}
+
 function limpiarCarrito() {
     state.carrito = [];
     renderCarritoVenta();
@@ -1391,6 +1459,8 @@ function renderCarritoVenta() {
         document.getElementById('cartIVA').textContent = '$0.00';
         document.getElementById('cartTotal').textContent = '$0.00';
         document.getElementById('cartTotalBS').textContent = 'Bs. 0.00';
+        const tabCount = document.getElementById('posTabCount');
+        if (tabCount) tabCount.textContent = '0';
         return;
     }
 
@@ -1418,6 +1488,8 @@ function renderCarritoVenta() {
     document.getElementById('cartIVA').textContent = '$' + iva.toFixed(2);
     document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
     document.getElementById('cartTotalBS').textContent = 'Bs. ' + totalBS.toFixed(2);
+    const tabCount = document.getElementById('posTabCount');
+    if (tabCount) tabCount.textContent = state.carrito.length;
 }
 
 function cargarSelectClientesVenta() {
