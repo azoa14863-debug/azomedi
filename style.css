@@ -2260,6 +2260,22 @@ input, select, textarea, button {
 
   .main-header {
     padding: 0 16px;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--header-height);
+    gap: 8px;
+  }
+
+  .header-right {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding-bottom: 8px;
+  }
+
+  .currency-display {
+    font-size: 0.8rem;
+    padding: 6px 10px;
   }
 
   .content-section {
@@ -2271,7 +2287,26 @@ input, select, textarea, button {
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stat-card {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .stat-primary {
+    font-size: 1.2rem;
+  }
+
+  .stat-info h3 {
+    font-size: 0.7rem;
   }
 
   .dashboard-grid {
@@ -2280,10 +2315,6 @@ input, select, textarea, button {
 
   .config-grid {
     grid-template-columns: 1fr;
-  }
-
-  .header-right {
-    display: none;
   }
 
   .filters-bar {
@@ -2322,6 +2353,138 @@ input, select, textarea, button {
   .recordatorio-actions button {
     flex: 1;
   }
+
+  /* Tables horizontal scroll */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+
+  /* POS */
+  .pos-container {
+    grid-template-columns: 1fr;
+  }
+
+  .pos-cart {
+    position: static;
+    max-height: none;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+
+  .product-card {
+    padding: 10px 8px;
+  }
+
+  .product-card .prod-name {
+    font-size: 12px;
+  }
+
+  .product-card .prod-price {
+    font-size: 14px;
+  }
+
+  /* Calculator */
+  .calculadora-container {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .calc-card {
+    padding: 16px;
+  }
+
+  .calc-tasa {
+    font-size: 22px;
+    padding: 12px 0;
+  }
+
+  .calc-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .calc-arrow {
+    padding-top: 0;
+    transform: rotate(90deg);
+  }
+
+  .calc-input-group input {
+    font-size: 20px;
+    padding: 14px;
+  }
+
+  .calc-display {
+    font-size: 22px;
+    padding: 14px;
+    min-height: 54px;
+  }
+
+  .calc-buttons {
+    gap: 6px;
+  }
+
+  .calc-buttons button {
+    padding: 16px;
+    font-size: 20px;
+    min-height: 52px;
+  }
+
+  .calc-buttons button.calc-eq {
+    padding: 18px;
+    font-size: 22px;
+  }
+
+  /* Cotizaciones */
+  .cotizador-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Clients grid */
+  .clients-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .client-card-actions {
+    flex-wrap: wrap;
+  }
+
+  /* Reports */
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .date-filter {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .date-filter input {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .date-filter button {
+    width: 100%;
+  }
+
+  /* Quick conversions */
+  .quick-conv-item {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .ventas-filter-row {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2344,6 +2507,30 @@ input, select, textarea, button {
     justify-content: center;
   }
 
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+
+  .stat-primary {
+    font-size: 1.05rem;
+  }
+
+  .stat-info h3 {
+    font-size: 0.65rem;
+  }
+
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
@@ -2353,8 +2540,37 @@ input, select, textarea, button {
     padding: 10px 8px;
   }
 
+  .product-card .prod-name {
+    font-size: 11px;
+  }
+
   .product-card .prod-price {
-    font-size: 14px;
+    font-size: 13px;
+  }
+
+  .calc-buttons button {
+    padding: 18px;
+    font-size: 22px;
+    min-height: 56px;
+  }
+
+  .calc-display {
+    font-size: 20px;
+    padding: 12px;
+  }
+
+  .currency-display {
+    font-size: 0.7rem;
+    padding: 5px 8px;
+  }
+
+  .quick-conv-item {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .recordatorio-item {
+    padding: 12px 14px;
   }
 }
 
