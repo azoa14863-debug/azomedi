@@ -1,14 +1,10 @@
-// Firebase Config - REPLACE WITH YOUR OWN
-// Go to https://console.firebase.google.com
-// Create project → Realtime Database → Start in test mode
-// Then paste your config here
-
+// Firebase Config
 const FIREBASE_CONFIG = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBtz1fOgLvRcI0vv-2dko4vAbUDvbyYFls",
+    authDomain: "azo-medi.firebaseapp.com",
+    databaseURL: "https://azo-medi-default-rtdb.firebaseio.com",
+    projectId: "azo-medi",
+    storageBucket: "azo-medi.firebasestorage.app",
+    messagingSenderId: "830139646188",
+    appId: "1:830139646188:web:7e9785ccad5b1c5a20a5c9"
 };
