@@ -110,6 +110,28 @@ let state = {
     filtroActual: 'todos'
 };
 
+// Auto-sync to Firebase when localStorage changes
+const _origSetItem = localStorage.setItem.bind(localStorage);
+localStorage.setItem = function(key, value) {
+    _origSetItem(key, value);
+    if (typeof firebaseSave === 'function' && firebaseReady && key.startsWith('cp_')) {
+        const path = key.replace('cp_', '');
+        try {
+            const parsed = JSON.parse(value);
+            if (Array.isArray(parsed) || (typeof parsed === 'object' && parsed !== null)) {
+                firebaseSave(path, parsed);
+            }
+        } catch(e) {}
+    }
+    if (typeof firebaseSaveTasa === 'function' && firebaseReady) {
+        if (key === 'cp_tasaBCV') {
+            firebaseSaveTasa('bcv', parseFloat(value));
+        } else if (key === 'cp_tasaParalelo') {
+            firebaseSaveTasa('paralelo', parseFloat(value));
+        }
+    }
+};
+
 // Inicializar
 document.addEventListener('DOMContentLoaded', () => {
     initApp();
