@@ -174,6 +174,11 @@ function initApp() {
     cargarSelectClientesCotizacion();
     initCalculadora();
     setTimeout(() => cargarEstadisticas(), 500);
+
+    // Re-initialize Lucide icons after all DOM is ready
+    if (typeof lucide !== 'undefined') {
+        setTimeout(() => lucide.createIcons(), 100);
+    }
 }
 
 let resizeTimer;
@@ -372,6 +377,7 @@ function abrirModalCliente(id) {
     document.getElementById('cFechaInicio').value = new Date().toISOString().split('T')[0];
     document.getElementById('cTasaBCV').value = state.tasaBCV ? 'Bs. ' + state.tasaBCV.toFixed(2) : 'No disponible';
     document.getElementById('cMontoConvertido').value = '';
+    document.getElementById('formRowBalance').style.display = 'none';
     document.getElementById('clienteModal').classList.add('active');
 }
 
@@ -394,6 +400,8 @@ function guardarCliente() {
     if (editId) {
         const idx = state.clientes.findIndex(c => c.id == editId);
         if (idx !== -1) {
+            const pagadoUSD = parseFloat(document.getElementById('cMontoPagadoUSD').value) || 0;
+            const pagadoBS = parseFloat(document.getElementById('cMontoPagadoBS').value) || 0;
             state.clientes[idx] = {
                 ...state.clientes[idx],
                 nombre: document.getElementById('cNombre').value.trim(),
@@ -404,9 +412,12 @@ function guardarCliente() {
                 monedaOriginal: moneda,
                 montoOriginal: monto,
                 montoUSD, montoBS,
+                montoPagadoUSD: pagadoUSD,
+                montoPagadoBS: pagadoBS,
                 fechaInicio: document.getElementById('cFechaInicio').value,
                 fechaVencimiento: document.getElementById('cFechaVencimiento').value,
-                descripcion: document.getElementById('cDescripcion').value.trim()
+                descripcion: document.getElementById('cDescripcion').value.trim(),
+                estado: pagadoUSD >= montoUSD ? 'pagado' : 'pendiente'
             };
         }
     } else {
@@ -452,11 +463,16 @@ function editarCliente(id) {
     document.getElementById('cTelefono').value = c.telefono || '';
     document.getElementById('cEmail').value = c.email || '';
     document.getElementById('cDireccion').value = c.direccion || '';
-    document.getElementById('cMoneda').value = c.monedaOriginal;
-    document.getElementById('cMonto').value = c.montoOriginal;
-    document.getElementById('cFechaInicio').value = c.fechaInicio;
-    document.getElementById('cFechaVencimiento').value = c.fechaVencimiento;
+    document.getElementById('cMoneda').value = c.monedaOriginal || 'USD';
+    document.getElementById('cMonto').value = c.montoOriginal || c.montoUSD || 0;
+    document.getElementById('cFechaInicio').value = c.fechaInicio || '';
+    document.getElementById('cFechaVencimiento').value = c.fechaVencimiento || '';
     document.getElementById('cDescripcion').value = c.descripcion || '';
+
+    // Show balance fields for existing clients
+    document.getElementById('formRowBalance').style.display = '';
+    document.getElementById('cMontoPagadoUSD').value = c.montoPagadoUSD || 0;
+    document.getElementById('cMontoPagadoBS').value = c.montoPagadoBS || 0;
     
     convertirMontoCliente();
     document.getElementById('clienteModal').classList.add('active');
@@ -893,7 +909,6 @@ function verDetalles(id) {
                     </tbody>
                 </table>
                 <div class="venta-resumen-footer">
-                    <span>IVA: $${v.iva.toFixed(2)}</span>
                     <strong>Total: $${v.totalUSD.toFixed(2)} / Bs. ${v.totalBS.toFixed(2)}</strong>
                 </div>
             </div>`;
@@ -1545,12 +1560,11 @@ function renderCarritoVenta() {
     `).join('');
 
     const subtotal = state.carrito.reduce((sum, c) => sum + (c.precioUSD * c.cantidad), 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const total = subtotal;
     const totalBS = state.tasaBCV ? total * state.tasaBCV : 0;
 
     document.getElementById('cartSubtotal').textContent = '$' + subtotal.toFixed(2);
-    document.getElementById('cartIVA').textContent = '$' + iva.toFixed(2);
+    document.getElementById('cartIVA').textContent = '$0.00';
     document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
     document.getElementById('cartTotalBS').textContent = 'Bs. ' + totalBS.toFixed(2);
     const tabCount = document.getElementById('posTabCount');
@@ -1700,7 +1714,6 @@ function verDetalleVenta(id) {
             </table>
             <div style="text-align:right;">
                 <p>Subtotal: <strong>$${v.subtotal.toFixed(2)}</strong></p>
-                <p>IVA (16%): <strong>$${v.iva.toFixed(2)}</strong></p>
                 <p style="font-size:18px;color:var(--primary);">TOTAL: <strong>$${v.totalUSD.toFixed(2)} | Bs. ${v.totalBS.toFixed(2)}</strong></p>
             </div>
             ${esFiado && estado === 'pendiente' ? `<div style="text-align:center;margin-top:15px;"><button class="btn-success" onclick="marcarVentaPagada('${v.id}');cerrarModal('detalleVentaModal')">Marcar como Pagada</button></div>` : ''}
@@ -1753,9 +1766,9 @@ function exportarVentasCSV() {
         return;
     }
 
-    let csv = 'N°,Fecha,Cliente,Subtotal USD,IVA USD,Total USD,Total BS,Método,Tasa BCV\n';
+    let csv = 'N°,Fecha,Cliente,Subtotal USD,Total USD,Total BS,Método,Tasa BCV\n';
     state.ventas.forEach((v, i) => {
-        csv += `${i + 1},"${new Date(v.fecha).toLocaleString('es-ES')}","${v.clienteNombre}",${v.subtotal.toFixed(2)},${v.iva.toFixed(2)},${v.totalUSD.toFixed(2)},${v.totalBS.toFixed(2)},"${v.metodoPago}",${v.tasaBCV || ''}\n`;
+        csv += `${i + 1},"${new Date(v.fecha).toLocaleString('es-ES')}","${v.clienteNombre}",${v.subtotal.toFixed(2)},${v.totalUSD.toFixed(2)},${v.totalBS.toFixed(2)},"${v.metodoPago}",${v.tasaBCV || ''}\n`;
     });
 
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -2038,8 +2051,7 @@ function procesarVenta() {
     }
 
     const subtotal = state.carrito.reduce((sum, c) => sum + (c.precioUSD * c.cantidad), 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const total = subtotal;
     const totalBS = state.tasaBCV ? total * state.tasaBCV : 0;
 
     const clienteId = (document.getElementById('ventaClienteTop')?.value || document.getElementById('ventaCliente')?.value || '');
@@ -2058,7 +2070,7 @@ function procesarVenta() {
             subtotal: c.precioUSD * c.cantidad
         })),
         subtotal: subtotal,
-        iva: iva,
+        iva: 0,
         totalUSD: total,
         totalBS: totalBS,
         metodoPago: document.getElementById('ventaMetodo').value,
@@ -2141,8 +2153,7 @@ function procesarVentaFiada() {
     }
 
     const subtotal = state.carrito.reduce((sum, c) => sum + (c.precioUSD * c.cantidad), 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const total = subtotal;
     const totalBS = state.tasaBCV ? total * state.tasaBCV : 0;
 
     const venta = {
@@ -2158,7 +2169,7 @@ function procesarVentaFiada() {
             subtotal: c.precioUSD * c.cantidad
         })),
         subtotal: subtotal,
-        iva: iva,
+        iva: 0,
         totalUSD: total,
         totalBS: totalBS,
         metodoPago: 'fiado',
@@ -2408,12 +2419,11 @@ function renderCarritoCotizacion() {
     `).join('');
 
     const subtotal = state.carritoCotizacion.reduce((sum, c) => sum + (c.precioUSD * c.cantidad), 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const total = subtotal;
     const totalBS = state.tasaBCV ? total * state.tasaBCV : 0;
 
     document.getElementById('cotizacionSubtotal').textContent = '$' + subtotal.toFixed(2);
-    document.getElementById('cotizacionIVA').textContent = '$' + iva.toFixed(2);
+    document.getElementById('cotizacionIVA').textContent = '$0.00';
     document.getElementById('cotizacionTotal').textContent = '$' + total.toFixed(2);
     document.getElementById('cotizacionTotalBS').textContent = 'Bs. ' + totalBS.toFixed(2);
 }
@@ -2434,8 +2444,7 @@ function guardarCotizacion() {
     }
 
     const subtotal = state.carritoCotizacion.reduce((sum, c) => sum + (c.precioUSD * c.cantidad), 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const total = subtotal;
 
     const clienteId = document.getElementById('cotizacionCliente').value;
     const cliente = clienteId ? state.clientes.find(c => c.id == clienteId) : null;
@@ -2454,7 +2463,7 @@ function guardarCotizacion() {
             subtotal: c.precioUSD * c.cantidad
         })),
         subtotal: subtotal,
-        iva: iva,
+        iva: 0,
         totalUSD: total,
         totalBS: state.tasaBCV ? total * state.tasaBCV : 0,
         validez: parseInt(document.getElementById('cotizacionValidez').value),
@@ -2483,8 +2492,7 @@ function enviarCotizacionWhatsApp() {
     const telefono = cliente ? cliente.telefono.replace(/[^0-9]/g, '') : '';
 
     const subtotal = state.carritoCotizacion.reduce((sum, c) => sum + (c.precioUSD * c.cantidad), 0);
-    const iva = subtotal * 0.16;
-    const total = subtotal + iva;
+    const total = subtotal;
     const totalBS = state.tasaBCV ? total * state.tasaBCV : 0;
     const validez = document.getElementById('cotizacionValidez').value;
     const notas = document.getElementById('cotizacionNotas').value;
@@ -2498,8 +2506,6 @@ function enviarCotizacionWhatsApp() {
         msg += `• ${c.nombre} x${c.cantidad} - $${(c.precioUSD * c.cantidad).toFixed(2)}\n`;
     });
 
-    msg += `\nSubtotal: $${subtotal.toFixed(2)}`;
-    msg += `\nIVA (16%): $${iva.toFixed(2)}`;
     msg += `\n*TOTAL: $${total.toFixed(2)} (Bs. ${totalBS.toFixed(2)})*`;
     msg += `\n\n⏱️ Validez: ${validez} días`;
     if (notas) msg += `\n📝 ${notas}`;
@@ -2575,7 +2581,6 @@ function verDetalleCotizacion(id) {
             </table>
             <div style="text-align:right;">
                 <p>Subtotal: <strong>$${c.subtotal.toFixed(2)}</strong></p>
-                <p>IVA (16%): <strong>$${c.iva.toFixed(2)}</strong></p>
                 <p style="font-size:18px;color:var(--primary);">TOTAL: <strong>$${c.totalUSD.toFixed(2)} | Bs. ${c.totalBS.toFixed(2)}</strong></p>
             </div>
         </div>
@@ -2600,8 +2605,6 @@ function reenviarCotizacionWhatsApp(id) {
         msg += `• ${item.nombre} x${item.cantidad} - $${item.subtotal.toFixed(2)}\n`;
     });
 
-    msg += `\nSubtotal: $${c.subtotal.toFixed(2)}`;
-    msg += `\nIVA (16%): $${c.iva.toFixed(2)}`;
     msg += `\n*TOTAL: $${c.totalUSD.toFixed(2)} (Bs. ${c.totalBS.toFixed(2)})*`;
     msg += `\n\n⏱️ Validez: ${c.validez} días`;
     if (c.notas) msg += `\n📝 ${c.notas}`;

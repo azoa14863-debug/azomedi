@@ -40,47 +40,47 @@
             </div>
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active" data-section="dashboard">
-                    <span class="nav-icon">📊</span>
+                    <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
                     <span class="nav-text">Dashboard</span>
                 </a>
                 <a href="#" class="nav-item" data-section="clientes">
-                    <span class="nav-icon">👥</span>
+                    <span class="nav-icon"><i data-lucide="users"></i></span>
                     <span class="nav-text">Clientes</span>
                 </a>
                 <a href="#" class="nav-item" data-section="pagos">
-                    <span class="nav-icon">💰</span>
+                    <span class="nav-icon"><i data-lucide="banknote"></i></span>
                     <span class="nav-text">Pagos</span>
                 </a>
                 <a href="#" class="nav-item" data-section="ventas">
-                    <span class="nav-icon">🛒</span>
+                    <span class="nav-icon"><i data-lucide="shopping-cart"></i></span>
                     <span class="nav-text">Ventas</span>
                 </a>
                 <a href="#" class="nav-item" data-section="productos">
-                    <span class="nav-icon">📦</span>
+                    <span class="nav-icon"><i data-lucide="package"></i></span>
                     <span class="nav-text">Productos</span>
                 </a>
                 <a href="#" class="nav-item" data-section="estadisticas">
-                    <span class="nav-icon">📊</span>
+                    <span class="nav-icon"><i data-lucide="bar-chart-3"></i></span>
                     <span class="nav-text">Estadísticas</span>
                 </a>
                 <a href="#" class="nav-item" data-section="cotizaciones">
-                    <span class="nav-icon">📋</span>
+                    <span class="nav-icon"><i data-lucide="file-text"></i></span>
                     <span class="nav-text">Cotizaciones</span>
                 </a>
                 <a href="#" class="nav-item" data-section="calculadora">
-                    <span class="nav-icon">🧮</span>
+                    <span class="nav-icon"><i data-lucide="calculator"></i></span>
                     <span class="nav-text">Calculadora</span>
                 </a>
                 <a href="#" class="nav-item" data-section="reportes">
-                    <span class="nav-icon">📈</span>
+                    <span class="nav-icon"><i data-lucide="trending-up"></i></span>
                     <span class="nav-text">Reportes</span>
                 </a>
                 <a href="#" class="nav-item" data-section="recordatorios">
-                    <span class="nav-icon">📱</span>
+                    <span class="nav-icon"><i data-lucide="bell"></i></span>
                     <span class="nav-text">Recordatorios</span>
                 </a>
                 <a href="#" class="nav-item" data-section="configuracion">
-                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-icon"><i data-lucide="settings"></i></span>
                     <span class="nav-text">Configuración</span>
                 </a>
             </nav>
@@ -117,7 +117,7 @@
             <section class="content-section active" id="section-dashboard">
                 <div class="stats-grid">
                     <div class="stat-card stat-total">
-                        <div class="stat-icon">💵</div>
+                        <div class="stat-icon"><i data-lucide="wallet" style="width:24px;height:24px;color:var(--primary)"></i></div>
                         <div class="stat-info">
                             <h3>Total Deudas</h3>
                             <p class="stat-primary" id="dashTotalUSD">$0.00</p>
@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="stat-card stat-pagado">
-                        <div class="stat-icon">✅</div>
+                        <div class="stat-icon"><i data-lucide="check-circle" style="width:24px;height:24px;color:var(--success)"></i></div>
                         <div class="stat-info">
                             <h3>Total Cobrado</h3>
                             <p class="stat-primary" id="dashPagadoUSD">$0.00</p>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                     <div class="stat-card stat-pendiente">
-                        <div class="stat-icon">⏳</div>
+                        <div class="stat-icon"><i data-lucide="clock" style="width:24px;height:24px;color:#8B6D14"></i></div>
                         <div class="stat-info">
                             <h3>Pendiente</h3>
                             <p class="stat-primary" id="dashPendienteUSD">$0.00</p>
@@ -141,7 +141,7 @@
                         </div>
                     </div>
                     <div class="stat-card stat-morosos">
-                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-icon"><i data-lucide="alert-triangle" style="width:24px;height:24px;color:var(--danger)"></i></div>
                         <div class="stat-info">
                             <h3>Morosos</h3>
                             <p class="stat-primary" id="dashMorosos">0</p>
@@ -149,7 +149,7 @@
                         </div>
                     </div>
                     <div class="stat-card stat-total">
-                        <div class="stat-icon">📦</div>
+                        <div class="stat-icon"><i data-lucide="package" style="width:24px;height:24px;color:var(--primary)"></i></div>
                         <div class="stat-info">
                             <h3>Inventario</h3>
                             <p class="stat-primary" id="dashInventarioUSD">$0.00</p>
@@ -160,15 +160,15 @@
 
                 <div class="dashboard-grid">
                     <div class="dashboard-card">
-                        <h3>📋 Últimos Clientes</h3>
+                        <h3><i data-lucide="users" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Últimos Clientes</h3>
                         <div id="ultimosClientes"></div>
                     </div>
                     <div class="dashboard-card">
-                        <h3>💰 Últimos Pagos</h3>
+                        <h3><i data-lucide="banknote" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Últimos Pagos</h3>
                         <div id="ultimosPagos"></div>
                     </div>
                     <div class="dashboard-card">
-                        <h3>📊 Resumen por Estado</h3>
+                        <h3><i data-lucide="pie-chart" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Resumen por Estado</h3>
                         <div id="resumenEstados"></div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
             <!-- Clientes Section -->
             <section class="content-section" id="section-clientes">
                 <div class="section-header">
-                    <h2>Gestión de Clientes</h2>
+                    <h2><i data-lucide="users" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Gestión de Clientes</h2>
                     <button class="btn-primary" onclick="abrirModalCliente()">+ Nuevo Cliente</button>
                 </div>
                 
@@ -199,7 +199,7 @@
             <!-- Pagos Section -->
             <section class="content-section" id="section-pagos">
                 <div class="section-header">
-                    <h2>Historial de Pagos</h2>
+                    <h2><i data-lucide="history" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Historial de Pagos</h2>
                 </div>
                 
                 <div class="filters-bar">
@@ -234,7 +234,7 @@
             <!-- Ventas Section (Punto de Venta) -->
             <section class="content-section" id="section-ventas">
                 <div class="section-header">
-                    <h2>🛒 Punto de Venta</h2>
+                    <h2><i data-lucide="shopping-cart" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Punto de Venta</h2>
                     <button class="btn-primary" onclick="nuevaVenta()">+ Nueva Venta</button>
                 </div>
 
@@ -277,8 +277,8 @@
                                 <span id="cartSubtotal">$0.00</span>
                             </div>
                             <div class="cart-row">
-                                <span>IVA (16%):</span>
-                                <span id="cartIVA">$0.00</span>
+                                <span style="display:none">IVA (16%):</span>
+                                <span id="cartIVA" style="display:none">$0.00</span>
                             </div>
                             <div class="cart-row cart-total">
                                 <span>TOTAL:</span>
@@ -315,7 +315,7 @@
                 </div>
 
                 <div class="section-header" style="margin-top:30px;">
-                    <h2>📋 Historial de Ventas</h2>
+                    <h2><i data-lucide="list" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Historial de Ventas</h2>
                     <div>
                         <input type="date" id="ventasFechaDesde" style="padding:8px;border-radius:8px;border:1px solid #ddd;">
                         <input type="date" id="ventasFechaHasta" style="padding:8px;border-radius:8px;border:1px solid #ddd;">
@@ -345,7 +345,7 @@
             <!-- Productos Section -->
             <section class="content-section" id="section-productos">
                 <div class="section-header">
-                    <h2>📦 Gestión de Productos</h2>
+                    <h2><i data-lucide="package" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Gestión de Productos</h2>
                     <button class="btn-primary" onclick="abrirModalProducto()">+ Nuevo Producto</button>
                 </div>
 
@@ -387,7 +387,7 @@
             <!-- Estadísticas Section -->
             <section class="content-section" id="section-estadisticas">
                 <div class="section-header">
-                    <h2>📊 Estadísticas y Gráficas</h2>
+                    <h2><i data-lucide="bar-chart-3" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Estadísticas y Gráficas</h2>
                     <div>
                         <select id="statsPeriodo" onchange="cargarEstadisticas()">
                             <option value="mes">Este Mes</option>
@@ -400,7 +400,7 @@
 
                 <div class="stats-grid">
                     <div class="stat-card stat-total">
-                        <div class="stat-icon">💰</div>
+                        <div class="stat-icon"><i data-lucide="dollar-sign" style="width:24px;height:24px;color:var(--primary)"></i></div>
                         <div class="stat-info">
                             <h3>Ventas del Mes</h3>
                             <p class="stat-primary" id="statsVentasMesUSD">$0.00</p>
@@ -408,7 +408,7 @@
                         </div>
                     </div>
                     <div class="stat-card stat-pagado">
-                        <div class="stat-icon">📦</div>
+                        <div class="stat-icon"><i data-lucide="shopping-bag" style="width:24px;height:24px;color:var(--success)"></i></div>
                         <div class="stat-info">
                             <h3>Productos Vendidos</h3>
                             <p class="stat-primary" id="statsProductosVendidos">0</p>
@@ -416,7 +416,7 @@
                         </div>
                     </div>
                     <div class="stat-card stat-pendiente">
-                        <div class="stat-icon">👥</div>
+                        <div class="stat-icon"><i data-lucide="user-check" style="width:24px;height:24px;color:#8B6D14"></i></div>
                         <div class="stat-info">
                             <h3>Clientes Atendidos</h3>
                             <p class="stat-primary" id="statsClientesAtendidos">0</p>
@@ -424,7 +424,7 @@
                         </div>
                     </div>
                     <div class="stat-card stat-morosos">
-                        <div class="stat-icon">📈</div>
+                        <div class="stat-icon"><i data-lucide="trophy" style="width:24px;height:24px;color:var(--danger)"></i></div>
                         <div class="stat-info">
                             <h3>Mejor Día</h3>
                             <p class="stat-primary" id="statsMejorDia">--</p>
@@ -435,19 +435,19 @@
 
                 <div class="dashboard-grid">
                     <div class="dashboard-card chart-card">
-                        <h3>📈 Ventas por Mes</h3>
+                        <h3><i data-lucide="bar-chart-3" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Ventas por Mes</h3>
                         <canvas id="chartVentasMes" height="250"></canvas>
                     </div>
                     <div class="dashboard-card chart-card">
-                        <h3>🥧 Ventas por Método de Pago</h3>
+                        <h3><i data-lucide="pie-chart" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Ventas por Método de Pago</h3>
                         <canvas id="chartMetodosPago" height="250"></canvas>
                     </div>
                     <div class="dashboard-card chart-card">
-                        <h3>🏆 Top Productos Más Vendidos</h3>
+                        <h3><i data-lucide="trophy" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Top Productos Más Vendidos</h3>
                         <div id="topProductosVendidos"></div>
                     </div>
                     <div class="dashboard-card chart-card">
-                        <h3>📊 Ventas por Día de Semana</h3>
+                        <h3><i data-lucide="calendar" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Ventas por Día de Semana</h3>
                         <canvas id="chartDiasSemana" height="250"></canvas>
                     </div>
                 </div>
@@ -456,7 +456,7 @@
             <!-- Cotizaciones Section -->
             <section class="content-section" id="section-cotizaciones">
                 <div class="section-header">
-                    <h2>📋 Cotizaciones</h2>
+                    <h2><i data-lucide="file-text" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Cotizaciones</h2>
                     <button class="btn-primary" onclick="nuevaCotizacion()">+ Nueva Cotización</button>
                 </div>
 
@@ -539,7 +539,7 @@
             <!-- Calculadora Section -->
             <section class="content-section" id="section-calculadora">
                 <div class="section-header">
-                    <h2>🧮 Calculadora de Cambio</h2>
+                    <h2><i data-lucide="calculator" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Calculadora de Cambio</h2>
                 </div>
                 <div class="calculadora-container">
                     <div class="calc-card">
@@ -603,19 +603,19 @@
                 
                 <div class="reports-grid">
                     <div class="report-card">
-                        <h3>📊 Resumen General</h3>
+                        <h3><i data-lucide="clipboard-list" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Resumen General</h3>
                         <div id="resumenGeneral"></div>
                     </div>
                     <div class="report-card">
-                        <h3>📅 Pagos por Mes</h3>
+                        <h3><i data-lucide="calendar-days" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Pagos por Mes</h3>
                         <div id="pagosPorMes"></div>
                     </div>
                     <div class="report-card">
-                        <h3>🏆 Top Clientes</h3>
+                        <h3><i data-lucide="award" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Top Clientes</h3>
                         <div id="topClientes"></div>
                     </div>
                     <div class="report-card">
-                        <h3>⚠️ Clientes Morosos</h3>
+                        <h3><i data-lucide="alert-circle" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Clientes Morosos</h3>
                         <div id="clientesMorososList"></div>
                     </div>
                 </div>
@@ -624,7 +624,7 @@
             <!-- Recordatorios Section -->
             <section class="content-section" id="section-recordatorios">
                 <div class="section-header">
-                    <h2>📱 Recordatorios WhatsApp</h2>
+                    <h2><i data-lucide="bell" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Recordatorios WhatsApp</h2>
                 </div>
                 
                 <div class="recordatorio-info">
@@ -638,12 +638,12 @@
             <!-- Configuración Section -->
             <section class="content-section" id="section-configuracion">
                 <div class="section-header">
-                    <h2>⚙️ Configuración</h2>
+                    <h2><i data-lucide="settings" style="width:22px;height:22px;vertical-align:middle;margin-right:8px;"></i> Configuración</h2>
                 </div>
                 
                 <div class="config-grid">
                     <div class="config-card">
-                        <h3>🏢 Datos de la Empresa</h3>
+                        <h3><i data-lucide="building-2" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Datos de la Empresa</h3>
                         <div class="config-form">
                             <div class="form-group">
                                 <label>Nombre de la Empresa</label>
@@ -666,7 +666,7 @@
                     </div>
 
                     <div class="config-card">
-                        <h3>🎨 Personalización Visual</h3>
+                        <h3><i data-lucide="palette" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Personalización Visual</h3>
                         <div class="config-form">
                             <div class="form-group">
                                 <label>Logo de la Empresa</label>
@@ -721,7 +721,7 @@
                     </div>
 
                     <div class="config-card">
-                        <h3>💱 Configuración de Moneda</h3>
+                        <h3><i data-lucide="coins" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Configuración de Moneda</h3>
                         <div class="config-form">
                             <div class="form-group">
                                 <label>Moneda Principal</label>
@@ -742,7 +742,7 @@
                     </div>
 
                     <div class="config-card">
-                        <h3>📱 Mensajes de WhatsApp</h3>
+                        <h3><i data-lucide="message-circle" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Mensajes de WhatsApp</h3>
                         <div class="config-form">
                             <div class="form-group">
                                 <label>Mensaje de Recordatorio (Pendiente)</label>
@@ -757,7 +757,7 @@
                     </div>
 
                     <div class="config-card">
-                        <h3>🗄️ Datos</h3>
+                        <h3><i data-lucide="database" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;"></i> Datos</h3>
                         <div class="config-form">
                             <button class="btn-secondary" onclick="exportarDatos()">📥 Exportar Todos los Datos</button>
                             <button class="btn-secondary" onclick="document.getElementById('importarInput').click()">📤 Importar Datos</button>
@@ -820,6 +820,16 @@
                     <div class="form-group">
                         <label>Tasa BCV al crear</label>
                         <input type="text" id="cTasaBCV" readonly class="input-readonly">
+                    </div>
+                </div>
+                <div class="form-row form-row-balance" id="formRowBalance" style="display:none;">
+                    <div class="form-group">
+                        <label>Pagado USD</label>
+                        <input type="number" id="cMontoPagadoUSD" step="0.01" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Pagado BS</label>
+                        <input type="number" id="cMontoPagadoBS" step="0.01" min="0" value="0">
                     </div>
                 </div>
                 <div class="form-row">
@@ -1018,6 +1028,9 @@
         </div>
     </div>
 
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
@@ -1027,6 +1040,11 @@
 
     <script src="app.js"></script>
     <script>
+        // Inicializar Lucide Icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
         // Registrar Service Worker para PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
