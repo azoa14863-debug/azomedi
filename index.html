@@ -148,6 +148,14 @@
                             <p class="stat-secondary" id="dashMorososMonto">$0.00</p>
                         </div>
                     </div>
+                    <div class="stat-card stat-total">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-info">
+                            <h3>Inventario</h3>
+                            <p class="stat-primary" id="dashInventarioUSD">$0.00</p>
+                            <p class="stat-secondary" id="dashInventarioInfo">0 productos</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="dashboard-grid">
@@ -236,6 +244,12 @@
                 </div>
                 <div class="pos-container">
                     <div class="pos-products" id="posPanelProductos">
+                        <div class="pos-client-bar">
+                            <select id="ventaClienteTop" onchange="syncClientSelect('top')">
+                                <option value="">Público general</option>
+                            </select>
+                            <button class="btn-sm btn-primary" onclick="abrirModalClienteRapido()" title="Nuevo cliente">+</button>
+                        </div>
                         <div class="pos-search-row">
                             <div class="search-box">
                                 <input type="text" id="buscarProductoVenta" placeholder="Buscar producto..." oninput="buscarProductoParaVenta()">

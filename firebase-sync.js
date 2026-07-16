@@ -85,7 +85,7 @@ function refreshView(path) {
     switch (path) {
         case 'clientes': renderClientes(); renderPagos(); cargarSelectClientesVenta(); cargarSelectClientesCotizacion(); renderDashboard(); break;
         case 'pagos': renderPagos(); renderDashboard(); break;
-        case 'productos': renderProductos(); renderProductosVenta(); break;
+        case 'productos': renderProductos(); renderProductosVenta(); renderDashboard(); break;
         case 'ventas': renderVentas(); renderDashboard(); cargarEstadisticas(); break;
         case 'cotizaciones': renderCotizaciones(); break;
         case 'config': loadConfig(); loadConfigVisual(); break;

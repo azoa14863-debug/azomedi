@@ -711,6 +711,14 @@ function renderDashboard() {
     setText('dashPendienteBS', 'Bs. ' + pendienteBS.toFixed(2));
     setText('dashMorosos', morosos.length);
     setText('dashMorososMonto', '$' + morososMonto.toFixed(2));
+
+    // Inventario
+    const inventarioUSD = state.productos.reduce((s, p) => s + (p.precioUSD * (p.stock || 0)), 0);
+    const totalProductos = state.productos.length;
+    const conStock = state.productos.filter(p => p.stock > 0).length;
+    const sinStock = state.productos.filter(p => p.stock <= 0).length;
+    setText('dashInventarioUSD', '$' + inventarioUSD.toFixed(2));
+    setText('dashInventarioInfo', totalProductos + ' productos (' + conStock + ' con stock, ' + sinStock + ' agotados)');
     
     // Últimos clientes
     const ultimos = [...state.clientes].sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion)).slice(0, 5);
@@ -1549,11 +1557,21 @@ function renderCarritoVenta() {
 
 function cargarSelectClientesVenta() {
     const select = document.getElementById('ventaCliente');
-    if (!select) return;
-    select.innerHTML = '<option value="">Venta al público general</option>';
-    state.clientes.forEach(c => {
-        select.innerHTML += `<option value="${c.id}">${c.nombre}</option>`;
-    });
+    const selectTop = document.getElementById('ventaClienteTop');
+    const options = '<option value="">Venta al público general</option>' +
+        state.clientes.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    if (select) select.innerHTML = options;
+    if (selectTop) selectTop.innerHTML = options;
+}
+
+function syncClientSelect(source) {
+    if (source === 'top') {
+        const val = document.getElementById('ventaClienteTop').value;
+        document.getElementById('ventaCliente').value = val;
+    } else {
+        const val = document.getElementById('ventaCliente').value;
+        document.getElementById('ventaClienteTop').value = val;
+    }
 }
 
 function nuevaVenta() {
@@ -1561,6 +1579,10 @@ function nuevaVenta() {
     renderCarritoVenta();
     document.getElementById('buscarProductoVenta').value = '';
     renderProductosVenta();
+    const sel = document.getElementById('ventaCliente');
+    const selTop = document.getElementById('ventaClienteTop');
+    if (sel) sel.value = '';
+    if (selTop) selTop.value = '';
 }
 
 function renderVentas() {
@@ -1995,8 +2017,11 @@ function guardarClienteRapido() {
     cargarSelectClientesVenta();
     cargarSelectClientesCotizacion();
 
-    // Seleccionar automáticamente el cliente nuevo
-    document.getElementById('ventaCliente').value = cliente.id;
+    // Seleccionar automáticamente el cliente nuevo en ambos selects
+    const sel = document.getElementById('ventaCliente');
+    const selTop = document.getElementById('ventaClienteTop');
+    if (sel) sel.value = cliente.id;
+    if (selTop) selTop.value = cliente.id;
 
     showToast(`Cliente "${nombre}" creado y seleccionado`, 'success');
 }
@@ -2015,7 +2040,7 @@ function procesarVenta() {
     const total = subtotal + iva;
     const totalBS = state.tasaBCV ? total * state.tasaBCV : 0;
 
-    const clienteId = document.getElementById('ventaCliente').value;
+    const clienteId = (document.getElementById('ventaClienteTop')?.value || document.getElementById('ventaCliente')?.value || '');
     const cliente = clienteId ? state.clientes.find(c => c.id == clienteId) : null;
 
     const venta = {
@@ -2101,7 +2126,7 @@ function procesarVentaFiada() {
         return;
     }
 
-    const clienteId = document.getElementById('ventaCliente').value;
+    const clienteId = document.getElementById('ventaClienteTop')?.value || document.getElementById('ventaCliente')?.value || '';
     if (!clienteId) {
         showToast('Seleccione un cliente para venta fiada', 'error');
         return;

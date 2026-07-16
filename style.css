@@ -260,10 +260,14 @@ input, select, textarea, button {
 }
 
 /* ================================================================
-   POS Mobile Tabs
+   POS Mobile Tabs & Client Bar
    ================================================================ */
 
 .pos-mobile-tabs {
+  display: none;
+}
+
+.pos-client-bar {
   display: none;
 }
 
@@ -2632,6 +2636,30 @@ input, select, textarea, button {
     position: static;
     max-height: none;
     padding: 12px;
+  }
+
+  .pos-client-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+
+  .pos-client-bar select {
+    flex: 1;
+    padding: 8px 10px;
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius);
+    font-size: 0.82rem;
+    font-weight: 600;
+    background: var(--white);
+    color: var(--text-primary);
+  }
+
+  .pos-client-bar .btn-sm {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    flex-shrink: 0;
   }
 
   .pos-cart h3 {
