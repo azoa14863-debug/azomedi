@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Azo Medi - Compra ahora, paga despues</title>
+    
+    <meta name="theme-color" content="#1A2732">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Azo Medi">
+    <meta name="description" content="Suplementos de calidad. Compra ahora y paga en cuotas sin interes con Azo Medi.">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Splash Screen -->
+        <div class="screen screen-splash active" id="screen-splash">
+            <div class="splash-content">
+                <div class="splash-logo">
+                    <div class="splash-logo-icon">AM</div>
+                </div>
+                <h1 class="splash-title">Azo Medi</h1>
+                <p class="splash-subtitle">Suplementos de calidad</p>
+                <div class="splash-loader">
+                    <div class="loader-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Onboarding -->
+        <div class="screen" id="screen-onboarding">
+            <div class="onboarding-container">
+                <div class="onboarding-slides" id="onboardingSlides">
+                    <div class="onboarding-slide active" data-slide="0">
+                        <div class="onboarding-illustration">
+                            <div class="ob-icon">&#128138;</div>
+                        </div>
+                        <h2>Compra lo que necesitas</h2>
+                        <p>Explora nuestro catalogo de +80 suplementos de calidad y elige los tuyos</p>
+                    </div>
+                    <div class="onboarding-slide" data-slide="1">
+                        <div class="onboarding-illustration">
+                            <div class="ob-icon">&#128176;</div>
+                        </div>
+                        <h2>Paga en cuotas</h2>
+                        <p>Llevatelo hoy pagando solo una inicial. El resto en cuotas iguales cada 14 dias</p>
+                    </div>
+                    <div class="onboarding-slide" data-slide="2">
+                        <div class="onboarding-illustration">
+                            <div class="ob-icon">&#128170;</div>
+                        </div>
+                        <h2>Sin intereses</h2>
+                        <p>0% de interes. Solo pagas el precio del producto. Rapido, facil y seguro</p>
+                    </div>
+                </div>
+                <div class="onboarding-dots">
+                    <span class="dot active" data-dot="0"></span>
+                    <span class="dot" data-dot="1"></span>
+                    <span class="dot" data-dot="2"></span>
+                </div>
+                <button class="btn-primary btn-full onboarding-next" id="btnOnboardingNext" onclick="nextOnboarding()">Siguiente</button>
+                <button class="btn-text onboarding-skip" onclick="finishOnboarding()">Saltar</button>
+            </div>
+        </div>
+
+        <!-- Auth Screen -->
+        <div class="screen" id="screen-auth">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <div class="auth-logo">
+                        <div class="auth-logo-icon">AM</div>
+                    </div>
+                    <h1>Azo Medi</h1>
+                    <p>Compra ahora, paga despues</p>
+                </div>
+                
+                <!-- Login Form -->
+                <div class="auth-form active" id="formLogin">
+                    <div class="form-group">
+                        <label>Telefono o Email</label>
+                        <input type="text" id="loginEmail" placeholder="Tu telefono o email">
+                    </div>
+                    <div class="form-group">
+                        <label>Contrasena</label>
+                        <div class="input-password">
+                            <input type="password" id="loginPassword" placeholder="Tu contrasena">
+                            <button class="btn-eye" onclick="togglePassword('loginPassword')">&#128065;</button>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-full" onclick="doLogin()">Iniciar Sesion</button>
+                    <div class="auth-divider"><span>o</span></div>
+                    <button class="btn-outline btn-full" onclick="doLoginPhone()">&#128241; Continuar con telefono</button>
+                    <p class="auth-switch">No tienes cuenta? <a href="#" onclick="showForm('register')">Registrate</a></p>
+                </div>
+
+                <!-- Register Form -->
+                <div class="auth-form" id="formRegister">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" id="regName" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label>Apellido</label>
+                            <input type="text" id="regApellido" placeholder="Tu apellido">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Edad</label>
+                            <input type="number" id="regAge" placeholder="18" min="16" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label>Cedula o RIF</label>
+                            <input type="text" id="regCedula" placeholder="V-12345678">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Foto de la cedula (frente)</label>
+                        <div class="upload-area" id="cedulaUploadArea">
+                            <input type="file" id="cedulaPhoto" accept="image/*" style="display:none" onchange="handleCedulaPhoto(this)">
+                            <input type="file" id="cedulaPhotoCam" accept="image/*" capture="environment" style="display:none" onchange="handleCedulaPhoto(this)">
+                            <img id="cedulaPreview" class="upload-preview" style="display:none">
+                            <div class="upload-placeholder" id="cedulaUploadPlaceholder">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                                <p style="margin-bottom:12px">Foto de tu cedula</p>
+                                <div style="display:flex;gap:10px;justify-content:center;width:100%">
+                                    <button type="button" class="btn-outline" style="font-size:0.8rem;padding:8px 14px;flex:1;max-width:150px" onclick="document.getElementById('cedulaPhotoCam').click()">&#128247; Tomar Foto</button>
+                                    <button type="button" class="btn-outline" style="font-size:0.8rem;padding:8px 14px;flex:1;max-width:150px" onclick="document.getElementById('cedulaPhoto').click()">&#128193; Galeria</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefono (WhatsApp)</label>
+                        <input type="tel" id="regPhone" placeholder="+58 412 1234567">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contrasena</label>
+                        <div class="input-password">
+                            <input type="password" id="regPassword" placeholder="Minimo 6 caracteres">
+                            <button class="btn-eye" onclick="togglePassword('regPassword')">&#128065;</button>
+                        </div>
+                    </div>
+                    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+                        <p style="font-size:0.85rem;font-weight:600;color:var(--text-sec);margin-bottom:8px">Direccion de entrega</p>
+                        <div class="form-group">
+                            <label>Calle / Urbanizacion</label>
+                            <input type="text" id="regStreet" placeholder="Ej: Calle 5, Urbanizacion El Paraiso">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Casa / Apartamento</label>
+                                <input type="text" id="regHouse" placeholder="Ej: Casa 12A">
+                            </div>
+                            <div class="form-group">
+                                <label>Piso / Torre</label>
+                                <input type="text" id="regApartment" placeholder="Ej: Torre 3, Piso 2">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Punto de referencia</label>
+                            <input type="text" id="regRef" placeholder="Ej: Frente al cafe, casa azul">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="regLocationCheck">
+                            <span>Autorizo el uso de mi ubicacion GPS para fines de seguridad y entrega</span>
+                        </label>
+                    </div>
+                    <button class="btn-primary btn-full" onclick="doRegister()">Crear Cuenta</button>
+                    <p class="auth-switch">Ya tienes cuenta? <a href="#" onclick="showForm('login')">Inicia sesion</a></p>
+                </div>
+
+                <!-- Phone Login -->
+                <div class="auth-form" id="formPhone">
+                    <div class="form-group">
+                        <label>Numero de telefono</label>
+                        <input type="tel" id="phoneInput" placeholder="+58 412 1234567">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="sendOTP()">Enviar Codigo</button>
+                    <p class="auth-switch"><a href="#" onclick="showForm('login')">Volver al login</a></p>
+                </div>
+
+                <!-- OTP Verify -->
+                <div class="auth-form" id="formOTP">
+                    <p class="otp-info">Ingresa el codigo de 4 digitos enviado a tu telefono</p>
+                    <div class="otp-inputs">
+                        <input type="text" maxlength="1" class="otp-input" data-otp="0" oninput="otpInput(this, 0)">
+                        <input type="text" maxlength="1" class="otp-input" data-otp="1" oninput="otpInput(this, 1)">
+                        <input type="text" maxlength="1" class="otp-input" data-otp="2" oninput="otpInput(this, 2)">
+                        <input type="text" maxlength="1" class="otp-input" data-otp="3" oninput="otpInput(this, 3)">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="verifyOTP()">Verificar</button>
+                    <p class="otp-resend">Reenviar codigo en <span id="otpTimer">60</span>s</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main App (Home) -->
+        <div class="screen" id="screen-home">
+            <div class="app-screen-content">
+                <!-- Header -->
+                <div class="app-header">
+                    <div class="app-header-left">
+                        <div class="app-logo-sm">AM</div>
+                        <div>
+                            <h1 class="app-header-title">Azo Medi</h1>
+                            <p class="app-header-sub" id="greetingText">Hola!</p>
+                        </div>
+                    </div>
+                    <div class="app-header-right">
+                        <button class="btn-icon" onclick="showScreen('notifications')">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Credit Line Banner -->
+                <div class="credit-banner" id="creditBanner">
+                    <div class="credit-banner-info">
+                        <p class="credit-banner-label">Tu linea de compra</p>
+                        <h2 class="credit-banner-amount" id="userCreditLine">$0.00</h2>
+                        <p class="credit-banner-sub">Disponible para compras</p>
+                    </div>
+                    <div class="credit-banner-right">
+                        <div class="bcv-rate-badge" id="bcvRateBadge">
+                            <span class="bcv-label">BCV</span>
+                            <span class="bcv-value" id="bcvRateDisplay">36.50</span>
+                            <small id="bcvDateDisplay" style="font-size:0.65rem;opacity:0.8;display:block;color:var(--text-muted)"></small>
+                        </div>
+                        <button class="btn-accent btn-sm" onclick="showScreen('credit')">Ver detalle</button>
+                    </div>
+                </div>
+
+                <!-- Category Pills -->
+                <div class="category-pills" id="categoryPills">
+                    <button class="pill active" onclick="filterCategory('todos', this)">Todos</button>
+                    <button class="pill" onclick="filterCategory('Suplementos', this)">Suplementos</button>
+                    <button class="pill" onclick="filterCategory('Bebidas-Depurativos-Polvos', this)">Bebidas</button>
+                    <button class="pill" onclick="filterCategory('Aceites cosmeticos', this)">Aceites</button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="searchInput" placeholder="Buscar suplementos..." oninput="searchProducts()">
+                </div>
+
+                <!-- Featured Products -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Destacados</h2>
+                        <a class="section-link" onclick="showScreen('catalog')">Ver todo</a>
+                    </div>
+                    <div class="featured-scroll" id="featuredProducts"></div>
+                </div>
+
+                <!-- How it works -->
+                <div class="section">
+                    <h2>Como funciona?</h2>
+                    <div class="how-it-works">
+                        <div class="hiw-step">
+                            <div class="hiw-num">1</div>
+                            <h3>Elige</h3>
+                            <p>Busca tu suplemento favorito en nuestro catalogo</p>
+                        </div>
+                        <div class="hiw-step">
+                            <div class="hiw-num">2</div>
+                            <h3>Paga la inicial</h3>
+                            <p>Paga solo el porcentaje inicial en el momento</p>
+                        </div>
+                        <div class="hiw-step">
+                            <div class="hiw-num">3</div>
+                            <h3>Paga en cuotas</h3>
+                            <p>El resto en cuotas iguales cada 14 dias</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Products -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Todos los productos</h2>
+                    </div>
+                    <div class="products-grid" id="homeProducts"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Catalog Screen -->
+        <div class="screen" id="screen-catalog">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Catalogo</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="category-pills" id="catalogPills">
+                    <button class="pill active" onclick="filterCategory('todos', this)">Todos</button>
+                    <button class="pill" onclick="filterCategory('Suplementos', this)">Suplementos</button>
+                    <button class="pill" onclick="filterCategory('Bebidas-Depurativos-Polvos', this)">Bebidas</button>
+                    <button class="pill" onclick="filterCategory('Aceites cosmeticos', this)">Aceites</button>
+                </div>
+                <div class="search-bar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="catalogSearchInput" placeholder="Buscar productos..." oninput="searchCatalogProducts()">
+                </div>
+                <div class="products-grid catalog-grid" id="catalogProducts"></div>
+            </div>
+        </div>
+
+        <!-- Product Detail -->
+        <div class="screen" id="screen-product">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Producto</h1>
+                    <button class="btn-icon" onclick="showScreen('cart')">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                        <span class="cart-badge" id="productCartBadge" style="display:none">0</span>
+                    </button>
+                </div>
+                <div class="product-detail" id="productDetail"></div>
+            </div>
+        </div>
+
+        <!-- Cart Screen -->
+        <div class="screen" id="screen-cart">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Mi Carrito</h1>
+                    <button class="btn-text-sm" onclick="clearCart()">Vaciar</button>
+                </div>
+                <div class="cart-content" id="cartContent">
+                    <div class="empty-state" id="emptyCart">
+                        <div class="empty-icon">&#128722;</div>
+                        <h3>Tu carrito esta vacio</h3>
+                        <p>Explora nuestro catalogo y agrega productos</p>
+                        <button class="btn-primary" onclick="showScreen('catalog')">Ver catalogo</button>
+                    </div>
+                    <div class="cart-items" id="cartItemsList" style="display:none"></div>
+                </div>
+                <div class="cart-footer" id="cartFooter" style="display:none">
+                    <div class="cart-summary">
+                        <div class="cart-summary-row">
+                            <span>Subtotal</span>
+                            <span id="cartSubtotal">$0.00</span>
+                        </div>
+                        <div class="cart-summary-row">
+                            <span>Cuota inicial (<span id="cartPct">40</span>%)</span>
+                            <span id="cartInitial" class="highlight">$0.00</span>
+                        </div>
+                        <div class="cart-summary-row total">
+                            <span>Total</span>
+                            <span id="cartTotal">$0.00</span>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-full btn-lg" onclick="showScreen('checkout')">Proceder al pago</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Screen -->
+        <div class="screen" id="screen-checkout">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Pago</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="checkout-content">
+                    <!-- Step Indicators -->
+                    <div class="checkout-steps">
+                        <div class="step active" data-step="1"><span>1</span> Plan</div>
+                        <div class="step" data-step="2"><span>2</span> Pago</div>
+                        <div class="step" data-step="3"><span>3</span> Confirmar</div>
+                    </div>
+
+                    <!-- Step 1: Payment Plan -->
+                    <div class="checkout-step active" id="checkoutStep1">
+                        <h3>Elige tu plan de pago</h3>
+                        <p class="checkout-desc">Paga una inicial y el resto en cuotas iguales sin interes</p>
+                        <div class="plan-options" id="planOptions"></div>
+                    </div>
+
+                    <!-- Step 2: Payment Method -->
+                    <div class="checkout-step" id="checkoutStep2">
+                        <h3>Metodo de pago para la inicial</h3>
+                        <div class="payment-methods" id="checkoutPaymentMethods">
+                        </div>
+                        <div class="payment-info" id="paymentInfo">
+                        </div>
+                        <div class="form-group">
+                            <label>Numero de referencia o serial</label>
+                            <input type="text" id="payReference" placeholder="Ej: 12345678">
+                        </div>
+                        <div class="form-group">
+                            <label>Monto pagado</label>
+                            <input type="number" id="payAmount" step="0.01" placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Capture del pago (opcional)</label>
+                            <div class="upload-area" onclick="document.getElementById('payCapture').click()">
+                                <input type="file" id="payCapture" accept="image/*" capture="environment" style="display:none">
+                                <p class="upload-hint">Toca para adjuntar foto del pago</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div class="checkout-step" id="checkoutStep3">
+                        <div class="confirmation-card">
+                            <div class="confirm-icon">&#10004;&#65039;</div>
+                            <h2>Compra registrada!</h2>
+                            <p>Tu compra ha sido registrada exitosamente. Confirma tu pago para activar tu pedido.</p>
+                            <div class="order-summary" id="orderSummary"></div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="checkout-nav">
+                        <button class="btn-outline" id="checkoutBack" onclick="prevStep()" style="display:none">Atras</button>
+                        <button class="btn-primary btn-full" id="checkoutNext" onclick="nextStep()">Continuar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Screen -->
+        <div class="screen" id="screen-orders">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <div style="width:40px"></div>
+                    <h1 class="app-header-title">Mis Pedidos</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="orders-content" id="ordersContent">
+                    <div class="empty-state" id="emptyOrders">
+                        <div class="empty-icon">&#128230;</div>
+                        <h3>Sin pedidos aun</h3>
+                        <p>Tus pedidos apareceran aqui</p>
+                    </div>
+                    <div class="orders-list" id="ordersList" style="display:none"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div class="screen" id="screen-profile">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <div style="width:40px"></div>
+                    <h1 class="app-header-title">Mi Cuenta</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="profile-content">
+                    <div class="profile-card">
+                        <div class="profile-avatar" id="profileAvatar">U</div>
+                        <h2 id="profileName">Usuario</h2>
+                        <p id="profileEmail">email@email.com</p>
+                        <div class="profile-level" id="profileLevel">
+                            <span class="level-badge">Nivel 1</span>
+                            <span class="level-label">Miembro</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <span class="stat-val" id="profileOrders">0</span>
+                            <span class="stat-lbl">Pedidos</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-val" id="profilePoints">0</span>
+                            <span class="stat-lbl">Puntos</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-val" id="profileCredit">$0</span>
+                            <span class="stat-lbl">Linea</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-menu">
+                        <div class="menu-item" onclick="showScreen('orders')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+                            <span>Mis Pedidos</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div class="menu-item" onclick="showScreen('payments')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            <span>Mis Pagos</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div class="menu-item" onclick="showScreen('credit')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                            <span>Mi Linea de Compra</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div class="menu-item" onclick="showScreen('help')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                            <span>Ayuda y Soporte</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div class="menu-item" onclick="openWhatsApp()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+                            <span>Contactar por WhatsApp</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div class="menu-item" onclick="showScreen('settings')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                            <span>Configuracion</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+                        </div>
+                        <div class="menu-item logout" onclick="doLogout()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            <span>Cerrar Sesion</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Credit Line Detail -->
+        <div class="screen" id="screen-credit">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Mi Linea</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="credit-detail-content">
+                    <div class="credit-big-card">
+                        <div class="credit-card-bg"></div>
+                        <div class="credit-card-content">
+                            <p>Linea de Compra</p>
+                            <h2 id="creditDetailAmount">$0.00</h2>
+                            <p class="credit-card-sub" id="creditDetailBS">Bs. 0.00</p>
+                        </div>
+                    </div>
+                    <div class="credit-breakdown">
+                        <div class="credit-row">
+                            <span>Usado</span>
+                            <span id="creditUsed" class="text-red">$0.00</span>
+                        </div>
+                        <div class="credit-row">
+                            <span>Disponible</span>
+                            <span id="creditAvailable" class="text-green">$0.00</span>
+                        </div>
+                        <div class="credit-row">
+                            <span>Nivel actual</span>
+                            <span id="creditLevel" class="highlight">Nivel 1</span>
+                        </div>
+                    </div>
+                    <div class="credit-progress-section">
+                        <h3>Progreso de nivel</h3>
+                        <div class="credit-progress">
+                            <div class="credit-progress-bar">
+                                <div class="credit-progress-fill" id="creditProgressFill" style="width:0%"></div>
+                            </div>
+                            <div class="credit-progress-labels">
+                                <span>Nivel 1</span>
+                                <span>Nivel 2</span>
+                            </div>
+                        </div>
+                        <p class="credit-progress-hint">Compra y paga a tiempo para subir de nivel y aumentar tu linea</p>
+                    </div>
+                    <div class="level-benefits">
+                        <h3>Beneficios por nivel</h3>
+                        <div class="benefit-card">
+                            <div class="benefit-level">Nivel 1</div>
+                            <ul>
+                                <li>Linea hasta $50</li>
+                                <li>Inicial del 40%</li>
+                                <li>1-3 cuotas segun monto</li>
+                            </ul>
+                        </div>
+                        <div class="benefit-card">
+                            <div class="benefit-level">Nivel 2</div>
+                            <ul>
+                                <li>Linea hasta $150</li>
+                                <li>Inicial del 30%</li>
+                                <li>1-3 cuotas segun monto</li>
+                            </ul>
+                        </div>
+                        <div class="benefit-card">
+                            <div class="benefit-level">Nivel 3</div>
+                            <ul>
+                                <li>Linea hasta $500</li>
+                                <li>Inicial del 20%</li>
+                                <li>1-3 cuotas segun monto</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments Screen -->
+        <div class="screen" id="screen-payments">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Mis Pagos</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="payments-content" id="paymentsContent">
+                    <div class="empty-state" id="emptyPayments">
+                        <div class="empty-icon">&#128179;</div>
+                        <h3>Sin pagos pendientes</h3>
+                        <p>Cuando hagas una compra, tus cuotas apareceran aqui</p>
+                    </div>
+                    <div class="payments-list" id="paymentsList" style="display:none"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Screen -->
+        <div class="screen" id="screen-notifications">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Notificaciones</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="notifications-content">
+                    <div class="empty-state">
+                        <div class="empty-icon">&#128276;</div>
+                        <h3>Sin notificaciones</h3>
+                        <p>Te avisaremos cuando haya novedades</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Screen -->
+        <div class="screen" id="screen-help">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Ayuda</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="help-content">
+                    <div class="faq-item">
+                        <h4>Como funciona Azo Medi?</h4>
+                        <p>Compras tu suplemento pagando una inicial y el resto en cuotas iguales sin interes cada 14 dias.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Cuanto es la inicial?</h4>
+                        <p>Depende de tu nivel. Nivel 1: 40%, Nivel 2: 30%, Nivel 3: 20%.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Cuantas cuotas puedo tener?</h4>
+                        <p>Depende del monto total. Menos de $15: 1 cuota. De $15 a $30: 2 cuotas. Mas de $30: 3 cuotas.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Como subo de nivel?</h4>
+                        <p>Paga tus cuotas a tiempo y adelanta pagos para subir de nivel y mejorar tu linea de compra.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Que metodos de pago aceptan?</h4>
+                        <p>Pago movil, transferencia bancaria, Binance, Zelle, efectivo y mas. Ver metodos disponibles en el checkout.</p>
+                    </div>
+                    <button class="btn-whatsapp btn-full" onclick="openWhatsApp()">&#128172; Contactar por WhatsApp</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div class="screen" id="screen-settings">
+            <div class="app-screen-content">
+                <div class="app-header">
+                    <button class="btn-icon" onclick="goBack()">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <h1 class="app-header-title">Configuracion</h1>
+                    <div style="width:40px"></div>
+                </div>
+                <div class="settings-content">
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="settingsName" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="settingsEmail" placeholder="Tu email">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefono</label>
+                        <input type="tel" id="settingsPhone" placeholder="Tu telefono">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="saveSettings()">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav" id="bottomNav" style="display:none">
+            <button class="nav-btn active" data-screen="home" onclick="navTo('home', this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+                <span>Inicio</span>
+            </button>
+            <button class="nav-btn" data-screen="catalog" onclick="navTo('catalog', this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Tienda</span>
+            </button>
+            <button class="nav-btn" data-screen="cart" onclick="navTo('cart', this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+                <span class="nav-cart-badge" id="navCartBadge" style="display:none">0</span>
+                <span>Carrito</span>
+            </button>
+            <button class="nav-btn" data-screen="orders" onclick="navTo('orders', this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>Pedidos</span>
+            </button>
+            <button class="nav-btn" data-screen="profile" onclick="navTo('profile', this)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Mi Cuenta</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="products.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').catch(() => {});
+        }
+    </script>
+</body>
+</html>
