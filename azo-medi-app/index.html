@@ -179,8 +179,8 @@
                     </div>
                     <div class="form-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" id="regLocationCheck">
-                            <span>Autorizo el uso de mi ubicacion GPS para fines de seguridad y entrega</span>
+                            <input type="checkbox" id="regLocationCheck" onchange="onLocationCheckChange(this)">
+                            <span>Autorizo el uso de mi ubicacion del dispositivo para fines de seguridad y entrega</span>
                         </label>
                     </div>
                     <button class="btn-primary btn-full" onclick="doRegister()">Crear Cuenta</button>
@@ -750,6 +750,22 @@
                 <span>Mi Cuenta</span>
             </button>
         </nav>
+    </div>
+
+    <!-- Modal Verificacion de Ubicacion -->
+    <div id="locationModal" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px">
+        <div style="background:var(--bg-card);border-radius:16px;padding:28px 24px;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.3)">
+            <div style="width:56px;height:56px;border-radius:50%;background:rgba(254,215,77,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3 style="font-size:1.1rem;margin-bottom:6px;color:var(--text)">Verificar identidad</h3>
+            <p style="font-size:0.82rem;color:var(--text-sec);margin-bottom:18px">Ingresa tu contrasena para activar la ubicacion de tu dispositivo</p>
+            <input type="password" id="locationModalPass" placeholder="Tu contrasena" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:0.95rem;background:var(--bg);color:var(--text);box-sizing:border-box">
+            <div style="display:flex;gap:10px;margin-top:16px">
+                <button onclick="cancelLocationModal()" style="flex:1;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:transparent;color:var(--text-sec);font-size:0.9rem;cursor:pointer">Cancelar</button>
+                <button onclick="confirmLocationModal()" style="flex:1;padding:12px;border:none;border-radius:10px;background:var(--accent);color:#1A2732;font-weight:700;font-size:0.9rem;cursor:pointer">Activar</button>
+            </div>
+        </div>
     </div>
 
     <!-- Toast -->

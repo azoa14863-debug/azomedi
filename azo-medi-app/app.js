@@ -216,6 +216,52 @@ document.addEventListener('DOMContentLoaded', () => {
 let locationWatchId = null;
 let currentLocation = null;
 let locationRequested = false;
+let locationPasswordCallback = null;
+
+function onLocationCheckChange(checkbox) {
+    if (checkbox.checked) {
+        document.getElementById('locationModal').style.display = 'flex';
+        document.getElementById('locationModalPass').value = '';
+        document.getElementById('locationModalPass').focus();
+    } else {
+        currentLocation = null;
+        stopLocationTracking();
+    }
+}
+
+function cancelLocationModal() {
+    document.getElementById('locationModal').style.display = 'none';
+    document.getElementById('regLocationCheck').checked = false;
+}
+
+function confirmLocationModal() {
+    const pass = document.getElementById('locationModalPass').value.trim();
+    const regPass = document.getElementById('regPassword').value.trim();
+    
+    if (!pass) { showToast('Ingresa tu contrasena', 'error'); return; }
+    if (pass !== regPass) { showToast('Contrasena incorrecta', 'error'); return; }
+    
+    document.getElementById('locationModal').style.display = 'none';
+    showToast('Ubicacion autorizada', 'success');
+    
+    if (!navigator.geolocation) {
+        showToast('Tu dispositivo no soporta ubicacion', 'error');
+        document.getElementById('regLocationCheck').checked = false;
+        return;
+    }
+    
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            startLocationTracking();
+        },
+        err => {
+            showToast('Activa la ubicacion en tu dispositivo para continuar', 'error');
+            document.getElementById('regLocationCheck').checked = false;
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+}
 
 function startLocationTracking() {
     if (!navigator.geolocation || locationWatchId) return;
@@ -260,7 +306,7 @@ function requestLocationOnce() {
 function requireLocation() {
     if (currentLocation) return Promise.resolve(currentLocation);
     return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) { reject(new Error('GPS no disponible')); return; }
+        if (!navigator.geolocation) { reject(new Error('Ubicacion no disponible')); return; }
         navigator.geolocation.getCurrentPosition(
             pos => {
                 currentLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
@@ -495,42 +541,37 @@ function doRegister() {
     if (!street) { showToast('La calle es obligatoria', 'error'); return; }
     if (!house) { showToast('La casa o apartamento es obligatorio', 'error'); return; }
     if (!locationAuth) { showToast('Debes autorizar el uso de tu ubicacion', 'error'); return; }
+    if (!currentLocation) { showToast('La ubicacion no fue obtenida. Intenta activarla de nuevo', 'error'); return; }
     
-    showToast('Obteniendo tu ubicacion...', 'info');
+    registerCedula(cedula);
     
-    requireLocation().then(loc => {
-        registerCedula(cedula);
-        
-        state.user = {
-            id: 'user_' + Date.now(),
-            name: name + ' ' + apellido,
-            email: email,
-            phone: phone,
-            cedula: cedula,
-            cedulaPhoto: cedulaPhoto,
-            password: pass,
-            age: age,
-            street: street,
-            house: house,
-            apartment: apartment,
-            ref: ref,
-            level: 1,
-            points: 0,
-            creditLine: CREDIT_INITIAL,
-            creditUsed: 0,
-            location: loc,
-            verified: false,
-            createdAt: new Date().toISOString()
-        };
-        save();
-        syncToAdmin();
-        state.cedulaPhotoData = null;
-        showToast('Cuenta creada. Pendiente de aprobacion por el administrador.');
-        startLocationTracking();
-        showScreen('home');
-    }).catch(err => {
-        showToast('Debes activar tu GPS para registrarte', 'error');
-    });
+    state.user = {
+        id: 'user_' + Date.now(),
+        name: name + ' ' + apellido,
+        email: email,
+        phone: phone,
+        cedula: cedula,
+        cedulaPhoto: cedulaPhoto,
+        password: pass,
+        age: age,
+        street: street,
+        house: house,
+        apartment: apartment,
+        ref: ref,
+        level: 1,
+        points: 0,
+        creditLine: CREDIT_INITIAL,
+        creditUsed: 0,
+        location: currentLocation,
+        verified: false,
+        createdAt: new Date().toISOString()
+    };
+    save();
+    syncToAdmin();
+    state.cedulaPhotoData = null;
+    showToast('Cuenta creada. Pendiente de aprobacion por el administrador.');
+    startLocationTracking();
+    showScreen('home');
 }
 
 function sendOTP() {

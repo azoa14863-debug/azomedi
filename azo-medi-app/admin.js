@@ -361,7 +361,7 @@ function showClientDetail(userId) {
         </div>` : ''}
         ${u.location ? `
         <div style="margin-top:16px">
-            <label style="font-size:0.8rem;font-weight:600;color:var(--text-sec);display:block;margin-bottom:8px">Ubicacion GPS</label>
+            <label style="font-size:0.8rem;font-weight:600;color:var(--text-sec);display:block;margin-bottom:8px">Ubicacion del dispositivo</label>
             <p style="font-size:0.9rem">Lat: ${u.location.lat?.toFixed(6)}, Lng: ${u.location.lng?.toFixed(6)}</p>
             <a href="https://www.google.com/maps?q=${u.location.lat},${u.location.lng}" target="_blank" style="color:var(--blue);font-size:0.85rem">Ver en Google Maps</a>
         </div>` : ''}
