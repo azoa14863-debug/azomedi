@@ -7,6 +7,13 @@
   "background_color": "#1A2732",
   "theme_color": "#1A2732",
   "orientation": "portrait",
+  "lang": "es",
+  "dir": "ltr",
+  "categories": ["shopping", "finance"],
+  "permissions": [
+    "geolocation"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icon.svg",
@@ -24,8 +31,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "categories": ["shopping", "finance"],
-  "lang": "es",
-  "dir": "ltr"
+  ]
 }
